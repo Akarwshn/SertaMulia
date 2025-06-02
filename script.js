@@ -1,14 +1,17 @@
+let currentSlide = 0;
 const slides = document.querySelectorAll('.slide');
-let current = 0;
 
-document.getElementById('nextBtn').addEventListener('click', () => {
-  slides[current].classList.remove('active');
-  current = (current + 1) % slides.length;
-  slides[current].classList.add('active');
-});
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === index);
+  });
+}
 
-document.getElementById('prevBtn').addEventListener('click', () => {
-  slides[current].classList.remove('active');
-  current = (current - 1 + slides.length) % slides.length;
-  slides[current].classList.add('active');
-});
+function changeSlide(direction) {
+  currentSlide += direction;
+  if (currentSlide < 0) currentSlide = slides.length - 1;
+  if (currentSlide >= slides.length) currentSlide = 0;
+  showSlide(currentSlide);
+}
+
+showSlide(currentSlide);
