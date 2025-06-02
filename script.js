@@ -1,17 +1,34 @@
-let currentSlide = 0;
 const slides = document.querySelectorAll('.slide');
+let currentSlide = 0;
 
 function showSlide(index) {
   slides.forEach((slide, i) => {
-    slide.classList.toggle('active', i === index);
+    slide.style.transform = `translateX(${100 * (i - index)}%)`;
   });
 }
 
-function changeSlide(direction) {
-  currentSlide += direction;
-  if (currentSlide < 0) currentSlide = slides.length - 1;
-  if (currentSlide >= slides.length) currentSlide = 0;
+showSlide(currentSlide);
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % slides.length;
   showSlide(currentSlide);
 }
 
-showSlide(currentSlide);
+function prevSlide() {
+  currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+  showSlide(currentSlide);
+}
+
+// Music control
+const audio = document.getElementById("bg-music");
+const toggleBtn = document.getElementById("toggleMusic");
+
+toggleBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    toggleBtn.textContent = "Matikan Musik 🎶";
+  } else {
+    audio.pause();
+    toggleBtn.textContent = "Putar Musik 🎵";
+  }
+});
