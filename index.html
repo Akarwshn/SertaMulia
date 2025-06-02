@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portofolio Saya</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portofolio | [Nama Kamu]</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <div class="slider">
-    <div class="slide active" id="slide1">
-      <h1>Profil Diri Singkat</h1>
-      <p>Nama: John Doe<br>Posisi: Software Engineer<br>Latar Belakang: Sarjana Informatika<br>Keahlian: Web Development, Data Analysis</p>
-    </div>
-    <div class="slide" id="slide2">
-      <h1>Tanggung Jawab</h1>
-      <p>• Merancang & mengembangkan aplikasi web<br>• Menulis kode efisien<br>• Kolaborasi dengan tim lintas fungsi<br>• Meningkatkan performa aplikasi</p>
-    </div>
-    <div class="slide" id="slide3">
-      <h1>Kendala & Solusi</h1>
-      <p>Kendala: Waktu terbatas, permintaan klien<br>Solusi: Prioritasi tugas, komunikasi aktif, tools manajemen proyek</p>
-    </div>
-    <div class="slide" id="slide4">
-      <h1>Pencapaian Kerja</h1>
-      <p>• Meningkatkan performa aplikasi 50%<br>• Employee of the Month<br>• Pimpin migrasi ke cloud sukses dalam 3 bulan</p>
-    </div>
-    <button class="btn" id="prevBtn">&#10094; Prev</button>
-    <button class="btn" id="nextBtn">Next &#10095;</button>
-  </div>
+  <header>
+    <img src="logo.png" alt="Logo Perusahaan" class="logo" />
+    <h1>Portofolio</h1>
+  </header>
 
-  <script src="script.js"></script>
+  <main class="slider">
+    <section class="slide active" id="profil">
+      <img src="foto.jpg" alt="Foto Diri" class="profile-img" />
+      <h2>Profil Singkat</h2>
+      <p>Halo! Saya [Nama Kamu], seorang [Posisi] di [Perusahaan]. Saya memiliki pengalaman [x] tahun di bidang [bidang].</p>
+    </section>
+
+    <section class="slide" id="tanggung-jawab">
+      <h2>Tanggung Jawab</h2>
+      <p>Sebagai [Posisi], saya bertanggung jawab untuk [deskripsi singkat tanggung jawab].</p>
+    </section>
+
+    <section class="slide" id="kendala">
+      <h2>Kendala & Solusi</h2>
+      <p>Salah satu kendala yang saya hadapi adalah [kendala]. Saya mengatasinya dengan [solusi yang dilakukan].</p>
+    </section>
+
+    <section class="slide" id="pencapaian">
+      <h2>Pencapaian</h2>
+      <p>Pencapaian terbaik saya adalah [deskripsi pencapaian], yang berdampak pada [hasil/dampak].</p>
+    </section>
+  </main>
+
+  <nav class="nav-buttons">
+    <button onclick="changeSlide(-1)">⟵</button>
+    <button onclick="changeSlide(1)">⟶</button>
+  </nav>
+
+  <footer>
+    <p>© 2025 [Nama Kamu]</p>
+  </footer>
 </body>
 </html>
