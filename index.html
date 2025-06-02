@@ -3,46 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portofolio | [Nama Kamu]</title>
+  <title>Portofolio Saya - PT. Fastrata Buana</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo Perusahaan" class="logo" />
-    <h1>Portofolio</h1>
-  </header>
+  <audio id="bg-music" src="lagu.mp3" loop></audio>
+  <button id="toggleMusic" class="music-btn">Putar Musik 🎵</button>
 
-  <main class="slider">
-    <section class="slide active" id="profil">
-      <img src="foto.jpg" alt="Foto Diri" class="profile-img" />
-      <h2>Profil Singkat</h2>
-      <p>Halo! Saya [Nama Kamu], seorang [Posisi] di [Perusahaan]. Saya memiliki pengalaman [x] tahun di bidang [bidang].</p>
+  <div class="slides">
+    <!-- Slide 1: Profil Diri -->
+    <section class="slide" id="profil">
+      <img src="foto.jpg" alt="Foto Diri" class="profile-img" data-aos="fade-up" />
+      <h1 data-aos="fade-up">Halo, Saya [Nama Anda]</h1>
+      <p data-aos="fade-up">Seorang profesional di PT. Fastrata Buana, berkomitmen untuk terus belajar dan berkembang.</p>
     </section>
 
+    <!-- Slide 2: Tanggung Jawab -->
     <section class="slide" id="tanggung-jawab">
-      <h2>Tanggung Jawab</h2>
-      <p>Sebagai [Posisi], saya bertanggung jawab untuk [deskripsi singkat tanggung jawab].</p>
+      <h2 data-aos="fade-right">Tanggung Jawab</h2>
+      <p data-aos="fade-left">Sebagai [Posisi Anda], saya bertanggung jawab untuk mengelola operasional harian, koordinasi tim, dan memastikan target perusahaan tercapai dengan efektif.</p>
     </section>
 
+    <!-- Slide 3: Kendala & Solusi -->
     <section class="slide" id="kendala">
-      <h2>Kendala & Solusi</h2>
-      <p>Salah satu kendala yang saya hadapi adalah [kendala]. Saya mengatasinya dengan [solusi yang dilakukan].</p>
+      <h2 data-aos="fade-right">Kendala & Solusi</h2>
+      <p data-aos="fade-left">Menghadapi keterbatasan waktu dan koordinasi antar tim. Solusinya adalah dengan meningkatkan komunikasi, penggunaan tools manajemen proyek, dan evaluasi rutin.</p>
     </section>
 
+    <!-- Slide 4: Pencapaian -->
     <section class="slide" id="pencapaian">
-      <h2>Pencapaian</h2>
-      <p>Pencapaian terbaik saya adalah [deskripsi pencapaian], yang berdampak pada [hasil/dampak].</p>
+      <h2 data-aos="fade-right">Pencapaian</h2>
+      <p data-aos="fade-left">Berhasil meningkatkan efisiensi tim sebesar 30%, menyelesaikan project X sebelum deadline, dan mendapatkan penghargaan [Nama Penghargaan].</p>
     </section>
-  </main>
 
-  <nav class="nav-buttons">
-    <button onclick="changeSlide(-1)">⟵</button>
-    <button onclick="changeSlide(1)">⟶</button>
-  </nav>
+    <!-- Slide 5: Logo Perusahaan -->
+    <section class="slide" id="logo">
+      <img src="logo.png" alt="Logo PT. Fastrata Buana" class="logo" data-aos="zoom-in" />
+      <h2 data-aos="fade-up">Bersama PT. Fastrata Buana, Mencapai Masa Depan Gemilang!</h2>
+    </section>
+  </div>
 
-  <footer>
-    <p>© 2025 [Nama Kamu]</p>
-  </footer>
+  <div class="nav-buttons">
+    <button onclick="prevSlide()">⏮️</button>
+    <button onclick="nextSlide()">⏭️</button>
+  </div>
+
+  <script src="script.js"></script>
+  <script>AOS.init();</script>
 </body>
 </html>
