@@ -3,111 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Undangan Flipbook</title>
+  <title>Portofolio Saya</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
-  <style>
-    #open-invitation {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #f39c12;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      border: none;
-      cursor: pointer;
-    }
-
-    #toggle-music {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-      background: #c0392b;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      display: none;
-    }
-
-    .flipbook {
-      display: none;
-    }
-  </style>
 </head>
 <body>
-
-  <!-- Tombol buka -->
-  <button id="open-invitation">Buka Undangan</button>
-
-  <!-- Tombol Musik -->
-  <button id="toggle-music">🔊 Musik</button>
-
-  <!-- Flipbook -->
-  <div class="flipbook">
-    <div class="hard">Cover Depan<br><small>Undangan</small></div>
-    <div class="page"><img src="img1.jpg" alt=""><small>Halaman 1</small></div>
-    <div class="page"><img src="img2.jpg" alt=""><small>Halaman 2</small></div>
-    <div class="hard">Cover Belakang</div>
+  <div class="slider">
+    <div class="slide active" id="slide1">
+      <h1>Profil Diri Singkat</h1>
+      <p>Nama: John Doe<br>Posisi: Software Engineer<br>Latar Belakang: Sarjana Informatika<br>Keahlian: Web Development, Data Analysis</p>
+    </div>
+    <div class="slide" id="slide2">
+      <h1>Tanggung Jawab</h1>
+      <p>• Merancang & mengembangkan aplikasi web<br>• Menulis kode efisien<br>• Kolaborasi dengan tim lintas fungsi<br>• Meningkatkan performa aplikasi</p>
+    </div>
+    <div class="slide" id="slide3">
+      <h1>Kendala & Solusi</h1>
+      <p>Kendala: Waktu terbatas, permintaan klien<br>Solusi: Prioritasi tugas, komunikasi aktif, tools manajemen proyek</p>
+    </div>
+    <div class="slide" id="slide4">
+      <h1>Pencapaian Kerja</h1>
+      <p>• Meningkatkan performa aplikasi 50%<br>• Employee of the Month<br>• Pimpin migrasi ke cloud sukses dalam 3 bulan</p>
+    </div>
+    <button class="btn" id="prevBtn">&#10094; Prev</button>
+    <button class="btn" id="nextBtn">Next &#10095;</button>
   </div>
 
-  <!-- Audio -->
-  <audio id="bg-music" loop>
-    <source src="lagu.mp3" type="audio/mpeg">
-    Browser Anda tidak mendukung audio.
-  </audio>
-
-  <!-- JavaScript -->
-  <script>
-    const music = document.getElementById('bg-music');
-    const toggleBtn = document.getElementById('toggle-music');
-    const openBtn = document.getElementById('open-invitation');
-    const flipbook = document.querySelector('.flipbook');
-    let isPlaying = false;
-
-    openBtn.addEventListener('click', () => {
-      openBtn.style.display = 'none';
-      flipbook.style.display = 'block';
-      toggleBtn.style.display = 'block';
-
-      $('.flipbook').turn({
-        width: window.innerWidth < 768 ? 300 : 1000,
-        height: window.innerWidth < 768 ? 500 : 600,
-        autoCenter: true,
-        display: window.innerWidth < 768 ? 'single' : 'double',
-        acceleration: true,
-        gradients: true,
-        elevation: 50
-      });
-
-      music.play().then(() => {
-        isPlaying = true;
-        toggleBtn.textContent = '🔊 Musik';
-      }).catch(() => {
-        // autoplay gagal (biasanya iOS) — biarkan tombol digunakan manual
-      });
-    });
-
-    toggleBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        music.pause();
-        toggleBtn.textContent = '🔇 Musik';
-      } else {
-        music.play();
-        toggleBtn.textContent = '🔊 Musik';
-      }
-      isPlaying = !isPlaying;
-    });
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
