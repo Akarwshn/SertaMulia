@@ -3,51 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ucapan Wisuda Dea Aprilia</title>
+  <title>Flipbook Wisuda Dea</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
-      background: #fce4ec;
-      color: #4a148c;
+      background: #fff0f5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .flipbook {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      height: 100vh;
+    }
+    .page {
+      flex: none;
+      scroll-snap-align: start;
+      width: 100vw;
+      padding: 30px;
+      box-sizing: border-box;
       text-align: center;
+      background: #fff;
+      position: relative;
     }
-    .container { max-width: 700px; margin: auto; padding: 20px; }
-    .hidden { display: none; }
-    input, textarea, button {
+    .page img {
+      max-width: 90%;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin: 20px 0;
+    }
+    .form-section input, .form-section textarea, .form-section button {
       padding: 10px;
-      margin: 5px;
+      margin: 5px auto;
       border-radius: 5px;
+      width: 90%;
       border: 1px solid #ccc;
-      width: 80%;
+      display: block;
+      font-size: 1rem;
     }
-    button { cursor: pointer; background: #8e24aa; color: white; border: none; }
-    .wish { background: white; padding: 10px; border-radius: 10px; margin: 10px 0; text-align: left; }
+    button { background: #c2185b; color: white; border: none; cursor: pointer; }
+    .wish { background: #ffe4f2; margin: 10px; padding: 10px; border-radius: 10px; text-align: left; }
     .reply { background: #f8bbd0; margin-top: 8px; padding: 8px; border-left: 3px solid #c2185b; border-radius: 6px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="login-section">
+  <audio autoplay loop>
+    <source src="https://akarwshn.github.io/assets/lagu-wisuda.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="flipbook">
+    <div class="page animate__animated animate__fadeInLeft">
       <h2>Login Ucapan Wisuda</h2>
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
       <button onclick="login()">Login</button>
       <p id="login-error" style="color:red"></p>
     </div>
 
-    <div id="main-section" class="hidden">
-      <h1 class="animate__animated animate__fadeInDown">Selamat Wisuda, Dea Aprilia!</h1>
+    <div class="page hidden" id="page1">
+      <h1>Selamat Wisuda, Dea Aprilia 🎓</h1>
       <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
+      <img src="https://akarwshn.github.io/assets/dea-wisuda.jpg" alt="Foto Wisuda">
+    </div>
 
-      <form onsubmit="sendWish(event)">
-        <input type="text" id="name" placeholder="Namamu" required><br>
-        <textarea id="message" placeholder="Ucapanmu" required></textarea><br>
-        <button type="submit">Kirim Ucapan</button>
-      </form>
+    <div class="page hidden" id="page2">
+      <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
+      <img src="https://akarwshn.github.io/assets/dea-wisuda.jpg">
+    </div>
 
+    <div class="page hidden" id="page3">
+      <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
+      <img src="https://akarwshn.github.io/assets/dea-wisuda.jpg">
+    </div>
+
+    <div class="page hidden" id="formPage">
+      <h2>Kirim Ucapanmu</h2>
+      <div class="form-section">
+        <input type="text" id="name" placeholder="Namamu">
+        <textarea id="message" placeholder="Ucapan terbaikmu untuk Dea"></textarea>
+        <button onclick="sendWish()">Kirim</button>
+      </div>
       <div id="wishes"></div>
     </div>
   </div>
@@ -57,38 +93,34 @@
       { username: 'dea', password: 'dea123', role: 'admin' },
       { username: 'teman', password: 'teman123', role: 'user' }
     ];
-
     let currentUser = null;
 
     function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const user = USERS.find(u => u.username === username && u.password === password);
-
-      if (user) {
-        currentUser = user;
-        document.getElementById('login-section').classList.add('hidden');
-        document.getElementById('main-section').classList.remove('hidden');
-        loadWishes();
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      const found = USERS.find(user => user.username === u && user.password === p);
+      if (found) {
+        currentUser = found;
+        document.querySelectorAll('.page').forEach((pg, i) => {
+          if (i > 0) pg.classList.remove('hidden');
+        });
+        document.querySelector('.page').classList.add('hidden');
       } else {
-        document.getElementById('login-error').innerText = 'Username atau password salah';
+        document.getElementById('login-error').innerText = 'Login salah, coba lagi';
       }
     }
 
-    // Dummy wish array untuk contoh (ganti dengan Supabase jika ingin)
     const wishes = [];
 
-    function sendWish(e) {
-      e.preventDefault();
+    function sendWish() {
       const name = document.getElementById('name').value;
       const message = document.getElementById('message').value;
-
-      const newWish = {
+      if (!name || !message) return;
+      wishes.unshift({
         name,
         message,
         reply: currentUser.role === 'admin' ? 'Terima kasih banyak ya!' : ''
-      };
-      wishes.unshift(newWish);
+      });
       document.getElementById('name').value = '';
       document.getElementById('message').value = '';
       loadWishes();
@@ -97,11 +129,11 @@
     function loadWishes() {
       const wishesDiv = document.getElementById('wishes');
       wishesDiv.innerHTML = '';
-      wishes.forEach(wish => {
+      wishes.forEach(w => {
         wishesDiv.innerHTML += `
-          <div class="wish animate__animated animate__fadeIn">
-            <strong>${wish.name}</strong><br>${wish.message}
-            ${wish.reply ? `<div class="reply"><strong>Dea Aprilia:</strong><br>${wish.reply}</div>` : ''}
+          <div class="wish">
+            <strong>${w.name}</strong><br>${w.message}
+            ${w.reply ? `<div class="reply">Dea Aprilia: ${w.reply}</div>` : ''}
           </div>
         `;
       });
