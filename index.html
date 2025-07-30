@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Flipbook Wisuda</title>
   <style>
     * {
@@ -47,6 +47,7 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     .book {
       width: 90vw;
       max-width: 700px;
@@ -80,13 +81,10 @@
       border-radius: 8px;
       margin-bottom: 15px;
     }
-    .typewriter {
+    .page p {
       font-size: 18px;
       color: #333;
       text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 2px solid rgba(0,0,0,0.5);
     }
     .page.flipped {
       transform: rotateY(-180deg);
@@ -128,129 +126,117 @@
   </style>
 </head>
 <body>
-  <div id="loginContainer">
-    <h2>Masuk ke Buku Wisuda</h2>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <p id="loginError" style="color:red; display:none;">Username atau password salah!</p>
+
+<!-- Login Form -->
+<div id="loginContainer">
+  <h2>Masuk ke Buku Wisuda</h2>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+  <p id="loginError" style="color:red; display:none;">Username atau password salah!</p>
+</div>
+
+<!-- Musik -->
+<audio id="bgm" src="MyGirl.mp3" loop></audio>
+
+<!-- Flipbook -->
+<div class="book hidden" id="book">
+  <div class="page cover"><p>✨ Buku Wisuda Dea ✨</p></div>
+
+  <div class="page">
+    <h2>GARIS WAKTU</h2>
+    <img src="dea-wisuda.png" alt="Halaman 1">
+    <p>Hari ini adalah bab terakhir dari perjuangan panjangmu...</p>
+  </div>
+  <div class="page">
+    <img src="images/2.jpg" alt="Halaman 2">
+    <p>Setiap lelah, tumpah di antara tumpukan tugas dan ujian.</p>
+  </div>
+  <div class="page">
+    <img src="images/3.jpg" alt="Halaman 3">
+    <p>Tapi kamu bertahan. Kamu tetap berdiri.</p>
+  </div>
+  <div class="page">
+    <img src="images/4.jpg" alt="Halaman 4">
+    <p>Selamat wisuda! Ini bukan akhir, tapi awal dari kisah yang lebih besar.</p>
   </div>
 
-  <audio id="bgm" src="MyGirl.mp3" loop></audio>
-
-  <div class="book hidden" id="book">
-    <div class="page cover"><p>✨ Buku Wisuda Dea ✨</p></div>
-    <div class="page">
-      <h2>GARIS WAKTU</h2>
-      <img src="dea-wisuda.png" alt="Halaman 1">
-      <p class="typewriter" data-text="Hari ini adalah bab terakhir dari perjuangan panjangmu..."></p>
-    </div>
-    <div class="page">
-      <img src="images/2.jpg" alt="Halaman 2">
-      <p class="typewriter" data-text="Setiap lelah, tumpah di antara tumpukan tugas dan ujian."></p>
-    </div>
-    <div class="page">
-      <img src="images/3.jpg" alt="Halaman 3">
-      <p class="typewriter" data-text="Tapi kamu bertahan. Kamu tetap berdiri."></p>
-    </div>
-    <div class="page">
-      <img src="images/4.jpg" alt="Halaman 4">
-      <p class="typewriter" data-text="Selamat wisuda! Ini bukan akhir, tapi awal dari kisah yang lebih besar."></p>
-    </div>
-    <div class="page back">
-      <p class="typewriter" data-text="Terima kasih telah membaca 💜"></p>
-    </div>
+  <div class="page back">
+    <p>Terima kasih telah membaca 💜</p>
   </div>
+</div>
 
-  <div class="nav-buttons hidden" id="navBtns">
-    <button id="prevBtn">←</button>
-    <button id="nextBtn">→</button>
-  </div>
+<div class="nav-buttons hidden" id="navBtns">
+  <button id="prevBtn">←</button>
+  <button id="nextBtn">→</button>
+</div>
 
-  <script>
-    function login() {
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      const errorMsg = document.getElementById('loginError');
+<script>
+  // Form Login
+  function login() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const errorMsg = document.getElementById('loginError');
 
-      if (user === 'dea' && pass === 'wisuda') {
-        document.getElementById('loginContainer').classList.add('hidden');
-        document.getElementById('book').classList.remove('hidden');
-        document.getElementById('navBtns').classList.remove('hidden');
-        document.getElementById('bgm').play();
-        runTypewriterOnVisiblePages();
+    if (user === 'dea' && pass === 'wisuda') {
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('book').classList.remove('hidden');
+      document.getElementById('navBtns').classList.remove('hidden');
+      document.getElementById('bgm').play();
+    } else {
+      errorMsg.style.display = 'block';
+    }
+  }
+
+  // Flipbook logic
+  const pages = document.querySelectorAll('.page');
+  let current = 0;
+
+  function updatePages() {
+    pages.forEach((page, index) => {
+      page.style.zIndex = pages.length - index;
+      if (index <= current) {
+        page.classList.add('flipped');
       } else {
-        errorMsg.style.display = 'block';
+        page.classList.remove('flipped');
       }
-    }
-
-    const pages = document.querySelectorAll('.page');
-    let current = 0;
-
-    function updatePages() {
-      pages.forEach((page, index) => {
-        page.style.zIndex = pages.length - index;
-        if (index <= current) {
-          page.classList.add('flipped');
-        } else {
-          page.classList.remove('flipped');
-        }
-      });
-      document.getElementById('prevBtn').disabled = current <= 0;
-      document.getElementById('nextBtn').disabled = current >= pages.length - 1;
-      runTypewriterOnVisiblePages();
-    }
-
-    document.getElementById('nextBtn').onclick = () => {
-      if (current < pages.length - 1) {
-        current++;
-        updatePages();
-      }
-    };
-
-    document.getElementById('prevBtn').onclick = () => {
-      if (current > 0) {
-        current--;
-        updatePages();
-      }
-    };
-
-    function typeWriterEffect(element, text, speed = 40) {
-      element.textContent = "";
-      let i = 0;
-      function type() {
-        if (i < text.length) {
-          element.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, speed);
-        }
-      }
-      type();
-    }
-
-    function runTypewriterOnVisiblePages() {
-      const visiblePage = pages[current];
-      const p = visiblePage.querySelector('.typewriter');
-      if (p) {
-        typeWriterEffect(p, p.getAttribute('data-text'));
-      }
-    }
-
-    let startX = 0;
-    document.getElementById('book').addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
     });
-    document.getElementById('book').addEventListener('touchend', e => {
-      let endX = e.changedTouches[0].clientX;
-      if (endX - startX > 50) {
-        if (current > 0) current--;
-      } else if (startX - endX > 50) {
-        if (current < pages.length - 1) current++;
-      }
+
+    document.getElementById('prevBtn').disabled = current <= 0;
+    document.getElementById('nextBtn').disabled = current >= pages.length - 1;
+  }
+
+  document.getElementById('nextBtn').onclick = () => {
+    if (current < pages.length - 1) {
+      current++;
       updatePages();
-    });
+    }
+  };
 
+  document.getElementById('prevBtn').onclick = () => {
+    if (current > 0) {
+      current--;
+      updatePages();
+    }
+  };
+
+  // Swipe
+  let startX = 0;
+  document.getElementById('book').addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+
+  document.getElementById('book').addEventListener('touchend', e => {
+    let endX = e.changedTouches[0].clientX;
+    if (endX - startX > 50) {
+      if (current > 0) current--;
+    } else if (startX - endX > 50) {
+      if (current < pages.length - 1) current++;
+    }
     updatePages();
-  </script>
+  });
+
+  updatePages();
+</script>
 </body>
 </html>
