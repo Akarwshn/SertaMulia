@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flipbook Wisuda</title>
+  <title>Buku Wisuda Sejarah Dea</title>
   <style>
     * {
       margin: 0; padding: 0;
@@ -11,8 +11,8 @@
       user-select: none;
     }
     body {
-      background: #d7c6a5;
-      font-family: 'Garamond', 'Times New Roman', serif;
+      background: #2c1f14;
+      font-family: 'Garamond', serif;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -31,53 +31,52 @@
     .page {
       width: 100%;
       height: 100%;
-      background: #f9f1d3;
-      background: linear-gradient(#f9f1d3, #e8d8b3);
+      background-image: url('images/old-paper.png');
+      background-size: cover;
+      background-position: center;
       position: absolute;
       top: 0; left: 0;
       transform-origin: left;
       transition: transform 1s;
       backface-visibility: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 30px;
-      border-radius: 4px;
-      border: 2px solid #a1865e;
+      border: 1px solid #523c1a;
+      color: #3a2e20;
+      font-size: 18px;
+      text-align: center;
     }
     .page img {
-      max-width: 90%;
-      max-height: 60%;
-      border-radius: 4px;
-      margin-bottom: 15px;
-      border: 1px solid #8b7b61;
-    }
-    .page p {
-      font-size: 18px;
-      color: #3a2e20;
-      text-align: center;
+      max-width: 85%;
+      max-height: 55%;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid #7e674f;
     }
     .page.flipped {
       transform: rotateY(-180deg);
       z-index: 0;
     }
     .page.cover {
-      background: #5e4630;
-      color: #fffbe6;
-      justify-content: center;
+      background-image: url('images/old-book-cover.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
       font-size: 28px;
+      justify-content: center;
       font-weight: bold;
-      text-align: center;
+      text-shadow: 1px 1px 3px #000;
     }
     .page.back {
-      background: #3a2e20;
-      color: #e2d4b7;
+      background: #3e2c1a;
+      color: #e2d6b5;
       justify-content: center;
       font-size: 20px;
-      text-align: center;
     }
     .nav-buttons {
       position: absolute;
@@ -89,7 +88,7 @@
       z-index: 10;
     }
     button {
-      background: #8b6f4e;
+      background: #7a5c3d;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -98,21 +97,21 @@
       cursor: pointer;
     }
     button:disabled {
-      background: #ccc;
+      background: #aaa;
     }
   </style>
 </head>
 <body>
   <div class="book" id="book">
-    <!-- Cover -->
+    <!-- COVER -->
     <div class="page cover">
-      <p>📜 Buku Sejarah Wisuda Dea 📜</p>
+      <p>📚 Wisuda Dea - Kisah yang Terukir</p>
     </div>
 
-    <!-- Isi Halaman -->
+    <!-- Halaman Isi -->
     <div class="page">
       <img src="images/1.jpg" alt="Halaman 1">
-      <p>Hari ini menjadi bab terakhir dari perjuangan panjangmu, tercatat dalam sejarah perjalanan hidupmu.</p>
+      <p>Hari ini menjadi bab terakhir dari perjuangan panjangmu, tercatat dalam sejarah hidupmu.</p>
     </div>
     <div class="page">
       <img src="images/2.jpg" alt="Halaman 2">
@@ -120,16 +119,16 @@
     </div>
     <div class="page">
       <img src="images/3.jpg" alt="Halaman 3">
-      <p>Tapi kamu bertahan, seperti pahlawan dalam kisah-kisah lama yang terus melangkah.</p>
+      <p>Kamu bertahan, seperti pahlawan dalam kisah lama yang terus melangkah.</p>
     </div>
     <div class="page">
       <img src="images/4.jpg" alt="Halaman 4">
-      <p>Selamat wisuda! Lembar baru telah dibuka. Kisah besar menantimu di depan sana.</p>
+      <p>Selamat wisuda! Lembar baru telah dibuka. Kisah besar menantimu.</p>
     </div>
 
-    <!-- Halaman Belakang -->
+    <!-- HALAMAN BELAKANG -->
     <div class="page back">
-      <p>📖 Terima kasih telah menjadi bagian dari sejarah ini 💜</p>
+      <p>📖 Terima kasih telah membaca sejarah ini 💜</p>
     </div>
   </div>
 
@@ -178,11 +177,8 @@
 
     document.getElementById('book').addEventListener('touchend', e => {
       let endX = e.changedTouches[0].clientX;
-      if (endX - startX > 50) {
-        if (current > 0) current--;
-      } else if (startX - endX > 50) {
-        if (current < pages.length - 1) current++;
-      }
+      if (endX - startX > 50 && current > 0) current--;
+      else if (startX - endX > 50 && current < pages.length - 1) current++;
       updatePages();
     });
 
