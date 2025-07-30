@@ -18,6 +18,10 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      position: relative;
+    }
+    .hidden {
+      display: none;
     }
     .book {
       width: 90vw;
@@ -94,16 +98,64 @@
     button:disabled {
       background: #ccc;
     }
+
+    /* Login */
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .login-box input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    /* Musik */
+    .music-control {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      z-index: 15;
+    }
+    .music-control button {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div class="book" id="book">
-    <!-- Cover -->
+
+  <!-- Musik & Kontrol -->
+  <div class="music-control hidden" id="musicControl">
+    <button onclick="toggleMusic()" id="musicBtn">🔊 Play</button>
+    <audio id="bgMusic" loop>
+      <source src="lagu.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- Login -->
+  <div class="login-box" id="loginBox">
+    <h2>Login Wisuda</h2>
+    <input type="text" id="username" placeholder="Nama pengguna">
+    <input type="password" id="password" placeholder="Kata sandi">
+    <button onclick="login()">Masuk</button>
+    <p id="loginError" style="color:red; margin-top:10px;"></p>
+  </div>
+
+  <!-- Buku -->
+  <div class="book hidden" id="book">
     <div class="page cover">
       <p>✨ Buku Wisuda Dea ✨</p>
     </div>
-
-    <!-- Isi Halaman -->
     <div class="page">
       <img src="dea-wisuda.png" alt="Halaman 1">
       <p>Hari ini adalah bab terakhir dari perjuangan panjangmu...</p>
@@ -120,14 +172,13 @@
       <img src="images/4.jpg" alt="Halaman 4">
       <p>Selamat wisuda! Ini bukan akhir, tapi awal dari kisah yang lebih besar.</p>
     </div>
-
-    <!-- Halaman Belakang -->
     <div class="page back">
       <p>Terima kasih telah membaca 💜</p>
     </div>
   </div>
 
-  <div class="nav-buttons">
+  <!-- Navigasi -->
+  <div class="nav-buttons hidden" id="navButtons">
     <button id="prevBtn">←</button>
     <button id="nextBtn">→</button>
   </div>
@@ -145,7 +196,6 @@
           page.classList.remove('flipped');
         }
       });
-
       document.getElementById('prevBtn').disabled = current <= 0;
       document.getElementById('nextBtn').disabled = current >= pages.length - 1;
     }
@@ -164,25 +214,52 @@
       }
     };
 
-    // Swipe support
     let startX = 0;
     document.getElementById('book').addEventListener('touchstart', e => {
       startX = e.touches[0].clientX;
     });
-
     document.getElementById('book').addEventListener('touchend', e => {
       let endX = e.changedTouches[0].clientX;
       if (endX - startX > 50) {
-        // swipe right
         if (current > 0) current--;
       } else if (startX - endX > 50) {
-        // swipe left
         if (current < pages.length - 1) current++;
       }
       updatePages();
     });
 
     updatePages();
+
+    // Login logic
+    function login() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const error = document.getElementById('loginError');
+
+      if (user === "dea" && pass === "wisuda2025") {
+        document.getElementById('loginBox').classList.add('hidden');
+        document.getElementById('book').classList.remove('hidden');
+        document.getElementById('navButtons').classList.remove('hidden');
+        document.getElementById('musicControl').classList.remove('hidden');
+        document.getElementById('bgMusic').play();
+        document.getElementById('musicBtn').innerText = "⏸ Pause";
+      } else {
+        error.textContent = "Nama pengguna atau kata sandi salah!";
+      }
+    }
+
+    // Musik
+    function toggleMusic() {
+      const music = document.getElementById('bgMusic');
+      const btn = document.getElementById('musicBtn');
+      if (music.paused) {
+        music.play();
+        btn.innerText = "⏸ Pause";
+      } else {
+        music.pause();
+        btn.innerText = "🔊 Play";
+      }
+    }
   </script>
 </body>
 </html>
