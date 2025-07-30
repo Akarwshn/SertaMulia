@@ -1,212 +1,230 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Flipbook Wisuda Dea</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
+
     body {
       margin: 0;
-      background: #fff0f5;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .flipbook {
-      perspective: 2000px;
-      position: relative;
-      width: 100vw;
-      height: 100vh;
+      background: linear-gradient(to bottom right, #fce4ec, #e3f2fd);
       overflow: hidden;
     }
+
+    .flipbook-container {
+      perspective: 2000px;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+    }
+
+    .book {
+      width: 90%;
+      max-width: 800px;
+      height: 90vh;
+      margin: auto;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
     .page {
-      position: absolute;
       width: 100%;
       height: 100%;
-      background: #fff;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      transform-origin: left;
-      transform-style: preserve-3d;
-      transition: transform 1s;
+      background: white;
+      position: absolute;
+      left: 0;
+      top: 0;
+      backface-visibility: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
       padding: 30px;
       box-sizing: border-box;
-      text-align: center;
-      backface-visibility: hidden;
+      border-radius: 8px;
+      display: none;
     }
-    .page img {
-      max-width: 90%;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      margin: 20px 0;
-    }
-    .form-section input, .form-section textarea, .form-section button {
-      padding: 10px;
-      margin: 5px auto;
-      border-radius: 5px;
-      width: 90%;
-      border: 1px solid #ccc;
+
+    .page.active {
       display: block;
-      font-size: 1rem;
+      animation: flipIn 1s ease;
     }
-    button { background: #c2185b; color: white; border: none; cursor: pointer; }
-    .wish { background: #ffe4f2; margin: 10px; padding: 10px; border-radius: 10px; text-align: left; }
-    .reply { background: #f8bbd0; margin-top: 8px; padding: 8px; border-left: 3px solid #c2185b; border-radius: 6px; }
-    .hidden { display: none; }
+
+    @keyframes flipIn {
+      from {
+        transform: rotateY(-90deg);
+        opacity: 0;
+      }
+      to {
+        transform: rotateY(0deg);
+        opacity: 1;
+      }
+    }
+
+    .page img {
+      max-width: 80%;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
     .controls {
       position: absolute;
       bottom: 20px;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
+      text-align: center;
     }
+
     .controls button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 5px;
-    }
-    #logoutBtn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      font-size: 0.9rem;
       background-color: #c2185b;
-      color: white;
       border: none;
-      border-radius: 5px;
+      color: white;
+      padding: 12px 20px;
+      margin: 0 10px;
+      border-radius: 8px;
       cursor: pointer;
-      display: none;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    #wishes div {
+      margin-top: 10px;
+      background: #f8bbd0;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    audio {
+      display: block;
+      margin: auto;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="https://akarwshn.github.io/assets/lagu-wisuda.mp3" type="audio/mpeg">
-  </audio>
+  <div class="flipbook-container">
+    <div id="book" class="book">
+      <!-- Halaman Login -->
+      <div class="page active">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-error" style="color:red"></p>
+      </div>
 
-  <button id="logoutBtn" onclick="logout()">Logout</button>
+      <!-- Halaman 1 -->
+      <div class="page">
+        <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
+        <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
+        <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Wisuda">
+      </div>
 
-  <div class="flipbook">
-    <div class="page" style="z-index: 5;" id="loginPage">
-      <h2>Login Ucapan Wisuda</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-      <p id="login-error" style="color:red"></p>
-    </div>
+      <!-- Halaman 2 -->
+      <div class="page">
+        <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
+        <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea">
+      </div>
 
-    <div class="page hidden" style="z-index: 4;" id="page1">
-      <h1>Selamat Wisuda, Dea Aprilia 🎓</h1>
-      <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
-      <img src="https://akarwshn.github.io/assets/dea-wisuda.jpg" alt="Foto Wisuda">
-    </div>
+      <!-- Halaman 3 -->
+      <div class="page">
+        <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
+        <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
+      </div>
 
-    <div class="page hidden" style="z-index: 3;" id="page2">
-      <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
-      <img src="https://akarwshn.github.io/assets/dea-wisuda.jpg">
-    </div>
-
-    <div class="page hidden" style="z-index: 2;" id="page3">
-      <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
-      <img src="https://akarwshn.github.io/assets/dea-wisuda.jpg">
-    </div>
-
-    <div class="page hidden" style="z-index: 1;" id="formPage">
-      <h2>Kirim Ucapanmu</h2>
-      <div class="form-section">
+      <!-- Halaman 4: Ucapan -->
+      <div class="page">
+        <h2>Kirim Ucapan untuk Dea 🎉</h2>
         <input type="text" id="name" placeholder="Namamu">
         <textarea id="message" placeholder="Ucapan terbaikmu untuk Dea"></textarea>
         <button onclick="sendWish()">Kirim</button>
+        <div id="wishes"></div>
+        <audio controls autoplay loop>
+          <source src="https://github.com/akarwshn/SertaMulia/raw/main/audio.mp3" type="audio/mp3">
+          Browser tidak mendukung audio.
+        </audio>
       </div>
-      <div id="wishes"></div>
     </div>
 
     <div class="controls">
-      <button onclick="prevPage()">⬅️ Sebelumnya</button>
-      <button onclick="nextPage()">Berikutnya ➡️</button>
+      <button onclick="prevPage()">◀ Sebelumnya</button>
+      <button onclick="nextPage()">Selanjutnya ▶</button>
     </div>
   </div>
 
   <script>
-    const USERS = [
-      { username: 'dea', password: 'dea123', role: 'admin' },
-      { username: 'teman', password: 'teman123', role: 'user' }
-    ];
-    let currentUser = null;
     let currentPage = 0;
-    const pageIds = ['loginPage','page1','page2','page3','formPage'];
+    const pages = document.querySelectorAll('.page');
 
-    function login() {
-      const u = document.getElementById('username').value;
-      const p = document.getElementById('password').value;
-      const found = USERS.find(user => user.username === u && user.password === p);
-      if (found) {
-        currentUser = found;
-        document.getElementById('logoutBtn').style.display = 'block';
-        goToPage(1);
-      } else {
-        document.getElementById('login-error').innerText = 'Login salah, coba lagi';
-      }
-    }
-
-    function logout() {
-      currentUser = null;
-      document.getElementById('logoutBtn').style.display = 'none';
-      goToPage(0);
-    }
-
-    function goToPage(index) {
-      pageIds.forEach((id, i) => {
-        const page = document.getElementById(id);
+    function showPage(index) {
+      pages.forEach((pg, i) => {
+        pg.classList.remove('active');
         if (i === index) {
-          page.classList.remove('hidden');
-        } else {
-          page.classList.add('hidden');
+          pg.classList.add('active');
         }
       });
-      currentPage = index;
     }
 
     function nextPage() {
-      if (currentPage < pageIds.length - 1) {
-        goToPage(currentPage + 1);
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        showPage(currentPage);
       }
     }
 
     function prevPage() {
-      if (currentPage > 1) {
-        goToPage(currentPage - 1);
+      if (currentPage > 0) {
+        currentPage--;
+        showPage(currentPage);
+      }
+    }
+
+    function login() {
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      if ((u === "dea" && p === "dea123") || (u === "teman" && p === "teman123")) {
+        currentPage = 1;
+        showPage(currentPage);
+      } else {
+        document.getElementById("login-error").innerText = "Login salah, coba lagi!";
       }
     }
 
     const wishes = [];
-
     function sendWish() {
-      const name = document.getElementById('name').value;
-      const message = document.getElementById('message').value;
+      const name = document.getElementById('name').value.trim();
+      const message = document.getElementById('message').value.trim();
       if (!name || !message) return;
-      wishes.unshift({
-        name,
-        message,
-        reply: currentUser.role === 'admin' ? 'Terima kasih banyak ya!' : ''
-      });
+      wishes.unshift({ name, message });
+      loadWishes();
       document.getElementById('name').value = '';
       document.getElementById('message').value = '';
-      loadWishes();
     }
 
     function loadWishes() {
       const wishesDiv = document.getElementById('wishes');
       wishesDiv.innerHTML = '';
       wishes.forEach(w => {
-        wishesDiv.innerHTML += `
-          <div class="wish">
-            <strong>${w.name}</strong><br>${w.message}
-            ${w.reply ? `<div class="reply">Dea Aprilia: ${w.reply}</div>` : ''}
-          </div>
-        `;
+        wishesDiv.innerHTML += `<div><strong>${w.name}</strong>: ${w.message}</div>`;
       });
     }
+
+    showPage(0);
   </script>
 </body>
 </html>
