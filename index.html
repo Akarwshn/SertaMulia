@@ -11,8 +11,8 @@
       user-select: none;
     }
     body {
-      background: #eee;
-      font-family: 'Georgia', serif;
+      background: #d7c6a5;
+      font-family: 'Garamond', 'Times New Roman', serif;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -31,7 +31,8 @@
     .page {
       width: 100%;
       height: 100%;
-      background: white;
+      background: #f9f1d3;
+      background: linear-gradient(#f9f1d3, #e8d8b3);
       position: absolute;
       top: 0; left: 0;
       transform-origin: left;
@@ -43,18 +44,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 30px;
       border-radius: 4px;
+      border: 2px solid #a1865e;
     }
     .page img {
       max-width: 90%;
       max-height: 60%;
-      border-radius: 8px;
+      border-radius: 4px;
       margin-bottom: 15px;
+      border: 1px solid #8b7b61;
     }
     .page p {
       font-size: 18px;
-      color: #333;
+      color: #3a2e20;
       text-align: center;
     }
     .page.flipped {
@@ -62,16 +65,19 @@
       z-index: 0;
     }
     .page.cover {
-      background: #8e44ad;
-      color: white;
+      background: #5e4630;
+      color: #fffbe6;
       justify-content: center;
       font-size: 28px;
+      font-weight: bold;
+      text-align: center;
     }
     .page.back {
-      background: #2c3e50;
-      color: white;
+      background: #3a2e20;
+      color: #e2d4b7;
       justify-content: center;
       font-size: 20px;
+      text-align: center;
     }
     .nav-buttons {
       position: absolute;
@@ -83,7 +89,7 @@
       z-index: 10;
     }
     button {
-      background: #7e57c2;
+      background: #8b6f4e;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -100,30 +106,30 @@
   <div class="book" id="book">
     <!-- Cover -->
     <div class="page cover">
-      <p>✨ Buku Wisuda Dea ✨</p>
+      <p>📜 Buku Sejarah Wisuda Dea 📜</p>
     </div>
 
     <!-- Isi Halaman -->
     <div class="page">
       <img src="images/1.jpg" alt="Halaman 1">
-      <p>Hari ini adalah bab terakhir dari perjuangan panjangmu...</p>
+      <p>Hari ini menjadi bab terakhir dari perjuangan panjangmu, tercatat dalam sejarah perjalanan hidupmu.</p>
     </div>
     <div class="page">
       <img src="images/2.jpg" alt="Halaman 2">
-      <p>Setiap lelah, tumpah di antara tumpukan tugas dan ujian.</p>
+      <p>Setiap lelah dan air mata menjadi tinta di lembar catatan yang tak pernah terlupakan.</p>
     </div>
     <div class="page">
       <img src="images/3.jpg" alt="Halaman 3">
-      <p>Tapi kamu bertahan. Kamu tetap berdiri.</p>
+      <p>Tapi kamu bertahan, seperti pahlawan dalam kisah-kisah lama yang terus melangkah.</p>
     </div>
     <div class="page">
       <img src="images/4.jpg" alt="Halaman 4">
-      <p>Selamat wisuda! Ini bukan akhir, tapi awal dari kisah yang lebih besar.</p>
+      <p>Selamat wisuda! Lembar baru telah dibuka. Kisah besar menantimu di depan sana.</p>
     </div>
 
     <!-- Halaman Belakang -->
     <div class="page back">
-      <p>Terima kasih telah membaca 💜</p>
+      <p>📖 Terima kasih telah menjadi bagian dari sejarah ini 💜</p>
     </div>
   </div>
 
@@ -173,10 +179,8 @@
     document.getElementById('book').addEventListener('touchend', e => {
       let endX = e.changedTouches[0].clientX;
       if (endX - startX > 50) {
-        // swipe right
         if (current > 0) current--;
       } else if (startX - endX > 50) {
-        // swipe left
         if (current < pages.length - 1) current++;
       }
       updatePages();
