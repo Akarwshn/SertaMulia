@@ -1,231 +1,171 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flipbook Wisuda Dea</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wisuda Dea Aprilia</title>
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Quicksand', sans-serif;
     }
 
     body {
       margin: 0;
-      background: linear-gradient(to bottom right, #fce4ec, #e3f2fd);
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #fdeff9, #ec38bc, #7303c0);
       overflow-x: hidden;
     }
 
     .flipbook-container {
       width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .book-wrapper {
       perspective: 2000px;
-    }
-
-    .book {
-      width: 90vw;
-      max-width: 800px;
-      height: 90vh;
       position: relative;
-      transform-style: preserve-3d;
+      margin: auto;
     }
 
     .page {
       width: 100%;
-      height: 100%;
-      background: white;
+      min-height: 100vh;
+      background: #fff;
+      padding: 2rem;
+      margin: 0 auto;
+      transform-origin: left;
+      transition: transform 1s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       position: absolute;
       top: 0;
       left: 0;
-      padding: 30px;
-      border-radius: 10px;
       backface-visibility: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      transform-origin: left;
-      transition: transform 0.8s ease;
-    }
-
-    .page img {
-      max-width: 80%;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-
-    .page.flipped {
-      transform: rotateY(-180deg);
-      z-index: 0;
-    }
-
-    .page:not(.flipped) {
-      z-index: 10;
-    }
-
-    .controls {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .controls button {
-      background-color: #c2185b;
-      border: none;
-      color: white;
-      padding: 12px 20px;
-      margin: 0 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    #wishes div {
-      margin-top: 10px;
-      background: #f8bbd0;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    audio {
-      display: block;
-      margin: auto;
-      margin-top: 10px;
     }
 
     .hidden {
       display: none;
     }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      background: #d11b66;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #a20f4d;
+    }
+
+    .navigation {
+      text-align: center;
+      margin-top: 2rem;
+    }
   </style>
 </head>
-<body>
 
-  <!-- Login Form -->
-  <div id="login-section" class="flipbook-container">
-    <div style="background:white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-      <p id="login-error" style="color:red"></p>
+<body>
+  <div class="flipbook-container">
+    <div class="page" id="page0">
+      <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
+      <p>Selamat atas kelulusanmu! Semoga ilmu yang didapat bermanfaat dan karier cemerlang di depan sana. 🌸</p>
+      <img src="https://github.com/Akarwshn/SertaMulia/dea-wisuda.png" alt="Dea Aprilia" width="200">
+    </div>
+    <div class="page hidden" id="page1">
+      <h2>Kirim Ucapanmu!</h2>
+      <form id="wishForm">
+        <input type="text" id="nama" placeholder="Nama kamu" required><br><br>
+        <textarea id="ucapan" placeholder="Tulis ucapan kamu..." required></textarea><br><br>
+        <button type="submit">Kirim</button>
+      </form>
+    </div>
+    <div class="page hidden" id="page2">
+      <h2>Ucapan Masuk 🎉</h2>
+      <div id="wishContainer"></div>
     </div>
   </div>
 
-  <!-- Flipbook -->
-  <div id="flipbook-section" class="flipbook-container hidden">
-    <div class="book-wrapper">
-      <div class="book" id="book">
-
-        <!-- Halaman 1 -->
-        <div class="page">
-          <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
-          <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Wisuda">
-        </div>
-
-        <!-- Halaman 2 -->
-        <div class="page">
-          <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea">
-        </div>
-
-        <!-- Halaman 3 -->
-        <div class="page">
-          <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
-        </div>
-
-        <!-- Halaman 4 -->
-        <div class="page">
-          <h2>Kirim Ucapan untuk Dea 🎉</h2>
-          <input type="text" id="name" placeholder="Namamu">
-          <textarea id="message" placeholder="Ucapan terbaikmu untuk Dea"></textarea>
-          <button onclick="sendWish()">Kirim</button>
-          <div id="wishes"></div>
-          <audio controls autoplay loop>
-            <source src="https://github.com/akarwshn/SertaMulia/raw/main/audio.mp3" type="audio/mp3">
-            Browser tidak mendukung audio.
-          </audio>
-        </div>
-
-      </div>
-
-      <div class="controls">
-        <button onclick="prevPage()">◀ Sebelumnya</button>
-        <button onclick="nextPage()">Selanjutnya ▶</button>
-      </div>
-    </div>
+  <div class="navigation">
+    <button onclick="prevPage()">◀ Sebelumnya</button>
+    <button onclick="nextPage()">Selanjutnya ▶</button>
   </div>
 
   <script>
-    const loginSection = document.getElementById("login-section");
-    const flipbookSection = document.getElementById("flipbook-section");
+    let currentPage = 0;
+    const pages = document.querySelectorAll('.page');
 
-    function login() {
-      const u = document.getElementById('username').value;
-      const p = document.getElementById('password').value;
-      if ((u === "dea" && p === "dea123") || (u === "teman" && p === "teman123")) {
-        loginSection.classList.add("hidden");
-        flipbookSection.classList.remove("hidden");
-      } else {
-        document.getElementById("login-error").innerText = "Login salah, coba lagi!";
-      }
+    function showPage(index) {
+      pages.forEach((page, i) => {
+        if (i === index) {
+          page.classList.remove('hidden');
+        } else {
+          page.classList.add('hidden');
+        }
+      });
     }
 
-    const pages = document.querySelectorAll('.page');
-    let current = 0;
-
     function nextPage() {
-      if (current < pages.length - 1) {
-        pages[current].classList.add('flipped');
-        current++;
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        showPage(currentPage);
       }
     }
 
     function prevPage() {
-      if (current > 0) {
-        current--;
-        pages[current].classList.remove('flipped');
+      if (currentPage > 0) {
+        currentPage--;
+        showPage(currentPage);
       }
     }
 
-    const wishes = [];
-    function sendWish() {
-      const name = document.getElementById('name').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!name || !message) return;
-      wishes.unshift({ name, message });
-      loadWishes();
-      document.getElementById('name').value = '';
-      document.getElementById('message').value = '';
+    showPage(currentPage);
+
+    // Supabase config
+    const SUPABASE_URL = 'https://temlsgkkbdphwcyqrosm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbWxzZ2trYmRwaHdjeXFyb3NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2Mjg4MzYsImV4cCI6MjA2MjIwNDgzNn0.5I0s9ZrZfc0QXWgfY1JEUsVgNDoBMYEnDwHDDL5lKUo';
+
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('wishForm');
+    const wishContainer = document.getElementById('wishContainer');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value;
+      const ucapan = document.getElementById('ucapan').value;
+
+      const { error } = await supabaseClient.from('wishes').insert([
+        { nama, ucapan }
+      ]);
+
+      if (!error) {
+        alert('Ucapan terkirim!');
+        form.reset();
+        nextPage();
+        loadWishes();
+      } else {
+        alert('Gagal mengirim ucapan.');
+      }
+    });
+
+    async function loadWishes() {
+      const { data, error } = await supabaseClient.from('wishes').select('*').order('id', { ascending: false });
+
+      if (data) {
+        wishContainer.innerHTML = '';
+        data.forEach(item => {
+          const div = document.createElement('div');
+          div.innerHTML = `<p><strong>${item.nama}:</strong> ${item.ucapan}</p>`;
+          wishContainer.appendChild(div);
+        });
+      }
     }
 
-    function loadWishes() {
-      const wishesDiv = document.getElementById('wishes');
-      wishesDiv.innerHTML = '';
-      wishes.forEach(w => {
-        wishesDiv.innerHTML += `<div><strong>${w.name}</strong>: ${w.message}</div>`;
-      });
-    }
+    loadWishes();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </body>
+
 </html>
