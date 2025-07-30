@@ -2,198 +2,158 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flipbook Wisuda Dea</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ucapan Wisuda - Flipbook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet"/>
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
       margin: 0;
-      font-family: 'Great Vibes', cursive;
-      background-image: url('https://akarwshn.github.io/SertaMulia/bg-wisuda.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+      background: linear-gradient(to right, #004e92, #000428);
+      font-family: 'Poppins', sans-serif;
       overflow-x: hidden;
     }
-    .flipbook-container, .login-container {
-      width: 100%;
-      height: 100vh;
+
+    .login-container, .flipbook-container {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(6px);
-    }
-    .login-box {
-      background:white; 
-      padding: 40px; 
-      border-radius: 10px; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      max-width: 400px;
-      width: 90%;
-      font-family: 'Quicksand', sans-serif;
-    }
-    .book-wrapper {
-      perspective: 2000px;
-      position: relative;
-    }
-    #flipbook {
-      width: 90vw;
-      max-width: 800px;
-      height: 90vh;
-    }
-    .page {
-      width: 100%;
-      height: 100%;
-      background: rgba(255,255,255,0.95);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      font-size: 24px;
-    }
-    .page img {
-      max-width: 80%;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-    .controls {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-    }
-    .controls button {
-      background-color: #c2185b;
-      border: none;
+      min-height: 100vh;
       color: white;
-      padding: 12px 20px;
-      margin: 0 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
     }
-    input, textarea {
-      width: 90%;
+
+    h1, h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5em;
+    }
+
+    .login-box, .wish-form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    input, textarea, button {
+      width: 100%;
       padding: 10px;
       margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      font-family: 'Quicksand', sans-serif;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
     }
-    textarea {
-      resize: vertical;
-      min-height: 100px;
+
+    button {
+      background-color: #ffd700;
+      color: #000;
+      cursor: pointer;
     }
-    #wishes div {
-      margin-top: 10px;
-      background: #f8bbd0;
-      padding: 10px;
-      border-radius: 8px;
-      font-family: 'Quicksand', sans-serif;
+
+    #flipbook {
+      width: 800px;
+      height: 500px;
+      margin: 30px auto;
     }
+
+    .page {
+      background-color: #fffbe7;
+      border: 1px solid #ddd;
+      padding: 20px;
+      font-size: 1.2em;
+      overflow: auto;
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .controls button {
+      margin: 0 20px;
+      padding: 10px 20px;
+      background: gold;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     audio {
-      display: block;
-      margin: auto;
-      margin-top: 10px;
-    }
-    .hidden {
-      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="login-container" id="login-section">
-    <div class="login-box">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-      <p id="login-error" style="color:red"></p>
-    </div>
+
+<div class="login-container" id="login">
+  <h1>Selamat Datang di Buku Ucapan Wisuda 🎓</h1>
+  <div class="login-box">
+    <input type="text" id="username" placeholder="Nama"/>
+    <input type="password" id="password" placeholder="Password"/>
+    <button onclick="checkLogin()">Masuk</button>
+  </div>
+</div>
+
+<div id="flipbook-container" class="flipbook-container" style="display:none;">
+  <div id="flipbook">
+    <div class="page"><h2>Selamat Wisuda!</h2><p>Hari ini kamu telah resmi menjadi sarjana. Ini adalah awal dari petualangan baru.</p></div>
+    <div class="page"><h2>Perjalanan Panjang</h2><p>Selama kuliah, kamu telah melewati tawa, tangis, tugas, dan perjuangan tak kenal lelah.</p></div>
+    <div class="page"><h2>Terima Kasih</h2><p>Untuk dosen, orang tua, teman sekelas, dan semua yang telah menemanimu sampai titik ini.</p></div>
+    <div class="page"><h2>Ucapan & Harapan</h2><form class="wish-form" onsubmit="submitWish(event)">
+      <input type="text" id="nama" placeholder="Nama kamu" required>
+      <textarea id="pesan" placeholder="Ucapanmu..." required></textarea>
+      <button type="submit">Kirim Ucapan</button>
+    </form></div>
   </div>
 
-  <div id="flipbook-section" class="flipbook-container hidden">
-    <div class="book-wrapper">
-      <div id="flipbook">
-        <div class="page">
-          <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
-          <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Wisuda">
-        </div>
-        <div class="page">
-          <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea">
-        </div>
-        <div class="page">
-          <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
-        </div>
-        <div class="page">
-          <h2>Berikan Ucapan untuk Dea 🥰</h2>
-          <input type="text" id="name" placeholder="Namamu">
-          <textarea id="message" placeholder="Tulis ucapanmu di sini..."></textarea>
-          <button onclick="sendWish()">Kirim Ucapan</button>
-          <div id="wishes"></div>
-          <audio controls autoplay loop>
-            <source src="https://github.com/akarwshn/bahagia/raw/main/assets/audio.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-      </div>
-      <div class="controls">
-        <button onclick="$('#flipbook').turn('previous');playFlipSound()">◀ Sebelumnya</button>
-        <button onclick="$('#flipbook').turn('next');playFlipSound()">Selanjutnya ▶</button>
-      </div>
-    </div>
+  <div class="controls">
+    <button onclick="$('#flipbook').turn('previous')">⬅ Sebelumnya</button>
+    <button onclick="$('#flipbook').turn('next')">Selanjutnya ➡</button>
   </div>
+</div>
 
-  <audio id="flipSound">
-    <source src="https://www.myinstants.com/media/sounds/page-flip.mp3" type="audio/mpeg">
-  </audio>
+<audio id="musik" autoplay loop controls>
+  <source src="https://cdn.pixabay.com/download/audio/2023/05/02/audio_d93a6e8a0e.mp3?filename=inspiring-graduation-137707.mp3" type="audio/mpeg">
+</audio>
+<audio id="flipSound" src="https://www.soundjay.com/books/book-page-flip-04.mp3" preload="auto"></audio>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
-  <script>
-    function login() {
-      const u = document.getElementById('username').value;
-      const p = document.getElementById('password').value;
-      if ((u === "dea" && p === "dea123") || (u === "teman" && p === "teman123")) {
-        document.getElementById('login-section').classList.add("hidden");
-        document.getElementById('flipbook-section').classList.remove("hidden");
-        $('#flipbook').turn({ width: 800, height: 600, autoCenter: true });
-        loadWishes();
-      } else {
-        document.getElementById("login-error").innerText = "Login salah, coba lagi!";
-      }
-    }
-
-    const wishes = [];
-    function sendWish() {
-      const name = document.getElementById('name').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!name || !message) return;
-      wishes.unshift({ name, message });
-      loadWishes();
-      document.getElementById('name').value = '';
-      document.getElementById('message').value = '';
-    }
-
-    function loadWishes() {
-      const wishesDiv = document.getElementById('wishes');
-      wishesDiv.innerHTML = '';
-      wishes.forEach(w => {
-        wishesDiv.innerHTML += `<div><strong>${w.name}</strong>: ${w.message}</div>`;
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+<script>
+  function checkLogin() {
+    const u = document.getElementById("username").value;
+    const p = document.getElementById("password").value;
+    if ((u && p) && (p === "wisuda2025")) {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("flipbook-container").style.display = "block";
+      $("#flipbook").turn({
+        width: 800,
+        height: 500,
+        autoCenter: true,
+        when: {
+          turning: function() {
+            document.getElementById("flipSound").play();
+          }
+        }
       });
+    } else {
+      alert("Login gagal! Gunakan password: wisuda2025");
     }
+  }
 
-    function playFlipSound() {
-      const flipSound = document.getElementById('flipSound');
-      flipSound.currentTime = 0;
-      flipSound.play();
-    }
-  </script>
+  function submitWish(e) {
+    e.preventDefault();
+    const nama = document.getElementById("nama").value;
+    const pesan = document.getElementById("pesan").value;
+    // Ganti bagian ini jika kamu ingin menyimpan ke Supabase
+    alert(`Terima kasih atas ucapanmu, ${nama}!`);
+    document.getElementById("nama").value = "";
+    document.getElementById("pesan").value = "";
+  }
+</script>
+
 </body>
 </html>
