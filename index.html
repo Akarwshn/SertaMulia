@@ -45,6 +45,7 @@
     button { background: #c2185b; color: white; border: none; cursor: pointer; }
     .wish { background: #ffe4f2; margin: 10px; padding: 10px; border-radius: 10px; text-align: left; }
     .reply { background: #f8bbd0; margin-top: 8px; padding: 8px; border-left: 3px solid #c2185b; border-radius: 6px; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -104,7 +105,7 @@
         document.querySelectorAll('.page').forEach((pg, i) => {
           if (i > 0) pg.classList.remove('hidden');
         });
-        document.querySelector('.page').classList.add('hidden');
+        document.querySelectorAll('.page')[0].classList.add('hidden');
       } else {
         document.getElementById('login-error').innerText = 'Login salah, coba lagi';
       }
