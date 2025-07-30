@@ -2,197 +2,110 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Ucapan Wisuda Dea Aprilia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <title>Ucapan Wisuda Dea Aprilia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <style>
     body {
-      font-family: 'Comic Neue', cursive;
-      background: linear-gradient(#ffe9ec, #ffe3f3);
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      text-align: center;
-      color: #333;
-    }
-
-    header, .form-section, .login-section, .message-board {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #fff0f5;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .graduation-photo {
-      width: 150px;
-      border-radius: 50%;
-      border: 5px dotted #ff80ab;
-      animation: float 4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: 2px solid #f48fb1;
-    }
-
-    button {
-      background: #ff4081;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 1em;
-    }
-
-    button:hover {
-      background: #e91e63;
-    }
-
-    .wish {
       background: #fce4ec;
-      padding: 10px 15px;
-      border-left: 5px solid #f06292;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      text-align: left;
+      color: #4a148c;
+      text-align: center;
     }
-
-    .wish .reply {
-      margin-top: 8px;
-      background: #e1bee7;
-      padding: 6px;
-      border-radius: 8px;
-      font-size: 0.9em;
-    }
-
-    audio { display: none; }
-
+    .container { max-width: 700px; margin: auto; padding: 20px; }
     .hidden { display: none; }
+    input, textarea, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 80%;
+    }
+    button { cursor: pointer; background: #8e24aa; color: white; border: none; }
+    .wish { background: white; padding: 10px; border-radius: 10px; margin: 10px 0; text-align: left; }
+    .reply { background: #f8bbd0; margin-top: 8px; padding: 8px; border-left: 3px solid #c2185b; border-radius: 6px; }
   </style>
 </head>
 <body>
+  <div class="container">
+    <div id="login-section">
+      <h2>Login Ucapan Wisuda</h2>
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button onclick="login()">Login</button>
+      <p id="login-error" style="color:red"></p>
+    </div>
 
-  <audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
-  </audio>
+    <div id="main-section" class="hidden">
+      <h1 class="animate__animated animate__fadeInDown">Selamat Wisuda, Dea Aprilia!</h1>
+      <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
 
-  <div class="login-section" id="loginSection">
-    <h2>Masuk</h2>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="login()">Login</button>
-    <p id="loginStatus"></p>
+      <form onsubmit="sendWish(event)">
+        <input type="text" id="name" placeholder="Namamu" required><br>
+        <textarea id="message" placeholder="Ucapanmu" required></textarea><br>
+        <button type="submit">Kirim Ucapan</button>
+      </form>
+
+      <div id="wishes"></div>
+    </div>
   </div>
 
-  <header class="animate__animated animate__fadeInDown hidden" id="mainHeader">
-    <img src="https://i.ibb.co/k1dPtdp/graduation-pic.jpg" alt="Foto Dea" class="graduation-photo">
-    <h1>Selamat Wisuda, Dea Aprilia!</h1>
-    <p>Semoga ilmu dan bahagia selalu menyertaimu 🎓💐</p>
-  </header>
+  <script>
+    const USERS = [
+      { username: 'dea', password: 'dea123', role: 'admin' },
+      { username: 'teman', password: 'teman123', role: 'user' }
+    ];
 
-  <section class="form-section hidden" id="formSection">
-    <h3>Kirim Ucapan 🎉</h3>
-    <form id="wishForm">
-      <input type="text" id="name" placeholder="Namamu" required>
-      <textarea id="message" placeholder="Ucapan kamu..." rows="4" required></textarea>
-      <button type="submit">Kirim</button>
-    </form>
-  </section>
+    let currentUser = null;
 
-  <section class="message-board hidden" id="wishesSection">
-    <h3>Ucapan yang Masuk 💌</h3>
-    <div id="wishes"></div>
-  </section>
-
-  <!-- Supabase Script -->
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    const SUPABASE_URL = 'https://temlsgkkbdphwcyqrosm.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbWxzZ2trYmRwaHdjeXFyb3NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2Mjg4MzYsImV4cCI6MjA2MjIwNDgzNn0.5I0s9ZrZfc0QXWgfY1JEUsVgNDoBMYEnDwHDDL5lKUo';
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const loginSection = document.getElementById('loginSection');
-    const mainHeader = document.getElementById('mainHeader');
-    const formSection = document.getElementById('formSection');
-    const wishesSection = document.getElementById('wishesSection');
-    const wishForm = document.getElementById('wishForm');
-    const wishesDiv = document.getElementById('wishes');
-    const loginStatus = document.getElementById('loginStatus');
-
-    let isAdmin = false;
-
-    async function login() {
-      const email = document.getElementById('email').value;
+    function login() {
+      const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
+      const user = USERS.find(u => u.username === username && u.password === password);
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (data.session) {
-        loginSection.classList.add('hidden');
-        mainHeader.classList.remove('hidden');
-        formSection.classList.remove('hidden');
-        wishesSection.classList.remove('hidden');
-
-        isAdmin = (email === 'akaraushan11@gmail.com'); // Ganti dengan email Dea
+      if (user) {
+        currentUser = user;
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('main-section').classList.remove('hidden');
         loadWishes();
       } else {
-        loginStatus.innerText = 'Login gagal, coba lagi.';
+        document.getElementById('login-error').innerText = 'Username atau password salah';
       }
     }
 
-    async function loadWishes() {
-      const { data: wishes } = await supabase
-        .from('wishes')
-        .select('*')
-        .order('id', { ascending: false });
+    // Dummy wish array untuk contoh (ganti dengan Supabase jika ingin)
+    const wishes = [];
 
-      wishesDiv.innerHTML = '';
-      wishes.forEach(w => {
-        const div = document.createElement('div');
-        div.className = 'wish';
-        div.innerHTML = `<strong>${w.name}</strong><br>${w.message}`;
-        if (w.reply) {
-          div.innerHTML += `<div class="reply"><strong>Dea:</strong> ${w.reply}</div>`;
-        } else if (isAdmin) {
-          div.innerHTML += `<textarea placeholder="Balasan..." data-id="${w.id}" class="replyBox"></textarea>
-                            <button onclick="replyTo(${w.id})">Balas</button>`;
-        }
-        wishesDiv.appendChild(div);
-      });
-    }
-
-    wishForm.addEventListener('submit', async (e) => {
+    function sendWish(e) {
       e.preventDefault();
       const name = document.getElementById('name').value;
       const message = document.getElementById('message').value;
-      await supabase.from('wishes').insert([{ name, message }]);
-      wishForm.reset();
-      loadWishes();
-    });
 
-    window.replyTo = async (id) => {
-      const replyBox = document.querySelector(`textarea[data-id="${id}"]`);
-      const reply = replyBox.value;
-      if (reply.trim()) {
-        await supabase.from('wishes').update({ reply }).eq('id', id);
-        loadWishes();
-      }
-    };
+      const newWish = {
+        name,
+        message,
+        reply: currentUser.role === 'admin' ? 'Terima kasih banyak ya!' : ''
+      };
+      wishes.unshift(newWish);
+      document.getElementById('name').value = '';
+      document.getElementById('message').value = '';
+      loadWishes();
+    }
+
+    function loadWishes() {
+      const wishesDiv = document.getElementById('wishes');
+      wishesDiv.innerHTML = '';
+      wishes.forEach(wish => {
+        wishesDiv.innerHTML += `
+          <div class="wish animate__animated animate__fadeIn">
+            <strong>${wish.name}</strong><br>${wish.message}
+            ${wish.reply ? `<div class="reply"><strong>Dea Aprilia:</strong><br>${wish.reply}</div>` : ''}
+          </div>
+        `;
+      });
+    }
   </script>
 </body>
 </html>
