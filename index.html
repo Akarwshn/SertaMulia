@@ -14,21 +14,25 @@
     body {
       margin: 0;
       background: linear-gradient(to bottom right, #fce4ec, #e3f2fd);
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .flipbook-container {
-      perspective: 2000px;
       width: 100%;
       height: 100vh;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-wrapper {
+      perspective: 2000px;
     }
 
     .book {
-      width: 90%;
+      width: 90vw;
       max-width: 800px;
       height: 90vh;
-      margin: auto;
       position: relative;
       transform-style: preserve-3d;
     }
@@ -38,36 +42,29 @@
       height: 100%;
       background: white;
       position: absolute;
-      left: 0;
       top: 0;
-      backface-visibility: hidden;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      left: 0;
       padding: 30px;
-      box-sizing: border-box;
-      border-radius: 8px;
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-      animation: flipIn 1s ease;
-    }
-
-    @keyframes flipIn {
-      from {
-        transform: rotateY(-90deg);
-        opacity: 0;
-      }
-      to {
-        transform: rotateY(0deg);
-        opacity: 1;
-      }
+      border-radius: 10px;
+      backface-visibility: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transform-origin: left;
+      transition: transform 0.8s ease;
     }
 
     .page img {
       max-width: 80%;
       border-radius: 10px;
       margin-top: 20px;
+    }
+
+    .page.flipped {
+      transform: rotateY(-180deg);
+      z-index: 0;
+    }
+
+    .page:not(.flipped) {
+      z-index: 10;
     }
 
     .controls {
@@ -114,94 +111,100 @@
       margin: auto;
       margin-top: 10px;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="flipbook-container">
-    <div id="book" class="book">
-      <!-- Halaman Login -->
-      <div class="page active">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <p id="login-error" style="color:red"></p>
-      </div>
 
-      <!-- Halaman 1 -->
-      <div class="page">
-        <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
-        <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
-        <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Wisuda">
-      </div>
-
-      <!-- Halaman 2 -->
-      <div class="page">
-        <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
-        <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea">
-      </div>
-
-      <!-- Halaman 3 -->
-      <div class="page">
-        <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
-        <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
-      </div>
-
-      <!-- Halaman 4: Ucapan -->
-      <div class="page">
-        <h2>Kirim Ucapan untuk Dea 🎉</h2>
-        <input type="text" id="name" placeholder="Namamu">
-        <textarea id="message" placeholder="Ucapan terbaikmu untuk Dea"></textarea>
-        <button onclick="sendWish()">Kirim</button>
-        <div id="wishes"></div>
-        <audio controls autoplay loop>
-          <source src="https://github.com/akarwshn/SertaMulia/raw/main/audio.mp3" type="audio/mp3">
-          Browser tidak mendukung audio.
-        </audio>
-      </div>
+  <!-- Login Form -->
+  <div id="login-section" class="flipbook-container">
+    <div style="background:white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+      <p id="login-error" style="color:red"></p>
     </div>
+  </div>
 
-    <div class="controls">
-      <button onclick="prevPage()">◀ Sebelumnya</button>
-      <button onclick="nextPage()">Selanjutnya ▶</button>
+  <!-- Flipbook -->
+  <div id="flipbook-section" class="flipbook-container hidden">
+    <div class="book-wrapper">
+      <div class="book" id="book">
+
+        <!-- Halaman 1 -->
+        <div class="page">
+          <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
+          <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
+          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Wisuda">
+        </div>
+
+        <!-- Halaman 2 -->
+        <div class="page">
+          <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
+          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea">
+        </div>
+
+        <!-- Halaman 3 -->
+        <div class="page">
+          <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
+          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
+        </div>
+
+        <!-- Halaman 4 -->
+        <div class="page">
+          <h2>Kirim Ucapan untuk Dea 🎉</h2>
+          <input type="text" id="name" placeholder="Namamu">
+          <textarea id="message" placeholder="Ucapan terbaikmu untuk Dea"></textarea>
+          <button onclick="sendWish()">Kirim</button>
+          <div id="wishes"></div>
+          <audio controls autoplay loop>
+            <source src="https://github.com/akarwshn/SertaMulia/raw/main/audio.mp3" type="audio/mp3">
+            Browser tidak mendukung audio.
+          </audio>
+        </div>
+
+      </div>
+
+      <div class="controls">
+        <button onclick="prevPage()">◀ Sebelumnya</button>
+        <button onclick="nextPage()">Selanjutnya ▶</button>
+      </div>
     </div>
   </div>
 
   <script>
-    let currentPage = 0;
-    const pages = document.querySelectorAll('.page');
-
-    function showPage(index) {
-      pages.forEach((pg, i) => {
-        pg.classList.remove('active');
-        if (i === index) {
-          pg.classList.add('active');
-        }
-      });
-    }
-
-    function nextPage() {
-      if (currentPage < pages.length - 1) {
-        currentPage++;
-        showPage(currentPage);
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 0) {
-        currentPage--;
-        showPage(currentPage);
-      }
-    }
+    const loginSection = document.getElementById("login-section");
+    const flipbookSection = document.getElementById("flipbook-section");
 
     function login() {
       const u = document.getElementById('username').value;
       const p = document.getElementById('password').value;
       if ((u === "dea" && p === "dea123") || (u === "teman" && p === "teman123")) {
-        currentPage = 1;
-        showPage(currentPage);
+        loginSection.classList.add("hidden");
+        flipbookSection.classList.remove("hidden");
       } else {
         document.getElementById("login-error").innerText = "Login salah, coba lagi!";
+      }
+    }
+
+    const pages = document.querySelectorAll('.page');
+    let current = 0;
+
+    function nextPage() {
+      if (current < pages.length - 1) {
+        pages[current].classList.add('flipped');
+        current++;
+      }
+    }
+
+    function prevPage() {
+      if (current > 0) {
+        current--;
+        pages[current].classList.remove('flipped');
       }
     }
 
@@ -223,8 +226,6 @@
         wishesDiv.innerHTML += `<div><strong>${w.name}</strong>: ${w.message}</div>`;
       });
     }
-
-    showPage(0);
   </script>
 </body>
 </html>
