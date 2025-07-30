@@ -1,72 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background-image: url('Background.jpg');
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            color: #fff;
-            text-shadow: 0px 0px 10px rgba(0,0,0,0.7);
-        }
+  <meta charset="UTF-8">
+  <title>Ucapan Wisuda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
-            max-width: 600px;
-            width: 90%;
-            margin: 20px;
-        }
+  <!-- CSS Animasi dan Font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(#ffe9ec, #ffe3f3);
+      color: #333;
+      text-align: center;
+    }
 
-        .photo {
-            width: 100%;
-            height: auto;
-            max-width: 500px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease-in-out;
-        }
+    header {
+      padding: 40px 20px 20px;
+    }
 
-        .photo:hover {
-            transform: scale(1.05);
-        }
+    .graduation-photo {
+      width: 180px;
+      border-radius: 50%;
+      border: 5px dotted #ff80ab;
+      margin-bottom: 10px;
+      animation: float 4s ease-in-out infinite;
+    }
 
-        .next-button {
-            display: inline-block;
-            padding: 12px 25px;
-            font-size: 18px;
-            color: #fff;
-            background: linear-gradient(45deg, #ff0066, #ff66cc);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            box-shadow: 0px 5px 15px rgba(255, 0, 102, 0.4);
-        }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
 
-        .next-button:hover {
-            background: linear-gradient(45deg, #ff66cc, #ff0066);
-            transform: scale(1.05);
-            box-shadow: 0px 10px 20px rgba(255, 0, 102, 0.6);
-        }
-    </style>
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0;
+      color: #c2185b;
+    }
+
+    p.subtitle {
+      font-size: 1.2em;
+      color: #777;
+      margin-top: 0;
+    }
+
+    .form-section {
+      background: #fff0f5;
+      border-radius: 15px;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .form-section h2 {
+      color: #d81b60;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #f48fb1;
+      border-radius: 10px;
+      font-size: 1em;
+    }
+
+    button {
+      background: #ff4081;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #e91e63;
+    }
+
+    .message-board {
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: left;
+    }
+
+    .wish {
+      background: #fce4ec;
+      border-left: 5px solid #f06292;
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .wish strong {
+      color: #c2185b;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="Example.jpg" alt="Foto" class="photo">
-        <a href="next.html" class="next-button">Next</a>
-    </div>
-    <script src="script.js"></script>
+
+  <header class="animate__animated animate__fadeInDown">
+    <img src="https://i.ibb.co/k1dPtdp/graduation-pic.jpg" alt="Foto Wisuda" class="graduation-photo">
+    <h1>Selamat Wisuda, Kak Aisyah!</h1>
+    <p class="subtitle">Hari ini bintang tak hanya di langit ✨</p>
+  </header>
+
+  <section class="form-section animate__animated animate__fadeInUp animate__delay-1s">
+    <h2>Kirim Ucapan 🎉</h2>
+    <form id="wishForm">
+      <input type="text" id="name" placeholder="Namamu..." required>
+      <textarea id="message" rows="4" placeholder="Ucapan manismu..." required></textarea>
+      <button type="submit">Kirim!</button>
+    </form>
+  </section>
+
+  <section class="message-board" id="wishes">
+    <!-- Data akan muncul di sini -->
+  </section>
+
+  <footer>
+    © 2025 Untuk Kak Aisyah, dari sahabat-sahabat tersayang.
+  </footer>
+
+  <audio autoplay loop id="bgm">
+    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Script ke Supabase -->
+  <script type="module">
+    // Ganti dengan config kamu
+    const SUPABASE_URL = 'https://defrxrgsnnmxpbucomop.supabase.co';
+    const SUPABASE_KEY = 'public-anon-key-kamu';
+    const TABLE_NAME = 'wishes';
+
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById('wishForm');
+    const wishesDiv = document.getElementById('wishes');
+
+    async function loadWishes() {
+      const { data, error } = await supabase
+        .from(TABLE_NAME)
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (data) {
+        wishesDiv.innerHTML = '';
+        data.forEach(wish => {
+          const div = document.createElement('div');
+          div.className = 'wish animate__animated animate__fadeIn';
+          div.innerHTML = `<strong>${wish.name}</strong><br>${wish.message}`;
+          wishesDiv.appendChild(div);
+        });
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const message = document.getElementById('message').value;
+
+      await supabase.from(TABLE_NAME).insert([{ name, message }]);
+      form.reset();
+      loadWishes();
+    });
+
+    loadWishes();
+  </script>
+
 </body>
 </html>
