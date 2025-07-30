@@ -66,7 +66,7 @@
     button {
       background: #ff4081;
       color: white;
-      padding: 12px 20px;
+      padding: 10px 16px;
       border: none;
       border-radius: 20px;
       font-size: 1em;
@@ -84,7 +84,7 @@
       border-left: 5px solid #f06292;
       padding: 10px 15px;
       border-radius: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     .wish strong {
@@ -93,14 +93,18 @@
 
     .reply-box {
       margin-top: 10px;
-      padding: 8px;
+      padding: 10px;
       background: #f8bbd0;
       border-left: 3px solid #c2185b;
       border-radius: 6px;
     }
 
-    .reply-form {
-      margin-top: 20px;
+    .reply-form-inline {
+      margin-top: 10px;
+    }
+
+    .reply-form-inline textarea {
+      margin-bottom: 5px;
     }
 
     footer {
@@ -117,7 +121,7 @@
   <header class="animate__animated animate__fadeInDown">
     <img src="https://i.ibb.co/k1dPtdp/graduation-pic.jpg" alt="Foto Wisuda" class="graduation-photo">
     <h1>Selamat Wisuda, Dea Aprilia!</h1>
-    <p class="subtitle">gua ga pandai berkata kata, tapi apa yg udh lu lakuin sejauh ini, sumpah lu keren bingitssss :D ✨</p>
+    <p class="subtitle">Langit hari ini berseri, karena kamu berseragam toga ✨</p>
   </header>
 
   <section class="form-section animate__animated animate__fadeInUp animate__delay-1s">
@@ -130,16 +134,7 @@
   </section>
 
   <section class="message-board" id="wishes">
-    <!-- Ucapan dan balasan muncul di sini -->
-  </section>
-
-  <section class="form-section reply-form">
-    <h2>Balasan dari Dea 💬</h2>
-    <form id="replyForm">
-      <input type="number" id="replyId" placeholder="ID ucapan yang ingin dibalas" required>
-      <textarea id="replyText" rows="3" placeholder="Tulis balasanmu..." required></textarea>
-      <button type="submit">Balas</button>
-    </form>
+    <!-- Ucapan dan balasan akan muncul di sini -->
   </section>
 
   <footer>
@@ -160,7 +155,6 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const wishForm = document.getElementById('wishForm');
-    const replyForm = document.getElementById('replyForm');
     const wishesDiv = document.getElementById('wishes');
 
     async function loadWishes() {
@@ -173,10 +167,31 @@
       data.forEach(wish => {
         const div = document.createElement('div');
         div.className = 'wish animate__animated animate__fadeIn';
+
         div.innerHTML = `
-          <strong>ID ${wish.id} - ${wish.name}</strong><br>${wish.message}
-          ${wish.reply ? `<div class="reply-box"><strong>Dea Aprilia:</strong><br>${wish.reply}</div>` : ''}
+          <strong>${wish.name}</strong><br>${wish.message}
+          ${wish.reply ? `<div class="reply-box"><strong>Dea Aprilia:</strong><br>${wish.reply}</div>` : `
+            <form class="reply-form-inline" data-id="${wish.id}">
+              <textarea rows="2" placeholder="Balasan Dea..." required></textarea>
+              <button type="submit">Balas</button>
+            </form>
+          `}
         `;
+
+        // Tambahkan event listener jika belum ada balasan
+        if (!wish.reply) {
+          setTimeout(() => {
+            const form = div.querySelector('.reply-form-inline');
+            form?.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const replyText = form.querySelector('textarea').value;
+              const id = form.dataset.id;
+              await supabase.from(TABLE_NAME).update({ reply: replyText }).eq('id', id);
+              loadWishes();
+            });
+          }, 0);
+        }
+
         wishesDiv.appendChild(div);
       });
     }
@@ -190,16 +205,8 @@
       loadWishes();
     });
 
-    replyForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = parseInt(document.getElementById('replyId').value);
-      const reply = document.getElementById('replyText').value;
-      await supabase.from(TABLE_NAME).update({ reply }).eq('id', id);
-      replyForm.reset();
-      loadWishes();
-    });
-
     loadWishes();
   </script>
+
 </body>
 </html>
