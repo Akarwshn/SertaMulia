@@ -27,6 +27,7 @@
 
     .book-wrapper {
       perspective: 2000px;
+      position: relative;
     }
 
     .book {
@@ -49,7 +50,7 @@
       backface-visibility: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       transform-origin: left;
-      transition: transform 0.8s ease;
+      transition: transform 1s ease;
     }
 
     .page img {
@@ -152,6 +153,18 @@
         <div class="page">
           <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
           <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
+        </div>
+
+        <!-- Halaman 4 - Form Ucapan -->
+        <div class="page">
+          <h2>Berikan Ucapan untuk Dea 🥰</h2>
+          <input type="text" id="name" placeholder="Namamu">
+          <textarea id="message" placeholder="Tulis ucapanmu di sini..."></textarea>
+          <button onclick="sendWish()">Kirim Ucapan</button>
+          <div id="wishes"></div>
+          <audio controls autoplay loop>
+            <source src="https://github.com/akarwshn/bahagia/raw/main/assets/audio.mp3" type="audio/mpeg">
+          </audio>
         </div>
 
       </div>
