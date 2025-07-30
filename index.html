@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Buku Wisuda Sejarah Dea</title>
+  <title>Flipbook Wisuda</title>
   <style>
     * {
       margin: 0; padding: 0;
@@ -11,8 +11,8 @@
       user-select: none;
     }
     body {
-      background: #2c1f14;
-      font-family: 'Garamond', serif;
+      background: #eee;
+      font-family: 'Georgia', serif;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -31,50 +31,45 @@
     .page {
       width: 100%;
       height: 100%;
-      background-image: url('images/old-paper.png');
-      background-size: cover;
-      background-position: center;
+      background: white;
       position: absolute;
       top: 0; left: 0;
       transform-origin: left;
       transition: transform 1s;
       backface-visibility: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 30px;
-      border: 1px solid #523c1a;
-      color: #3a2e20;
-      font-size: 18px;
-      text-align: center;
+      padding: 20px;
+      border-radius: 4px;
     }
     .page img {
-      max-width: 85%;
-      max-height: 55%;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      border: 1px solid #7e674f;
+      max-width: 90%;
+      max-height: 60%;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .page p {
+      font-size: 18px;
+      color: #333;
+      text-align: center;
     }
     .page.flipped {
       transform: rotateY(-180deg);
       z-index: 0;
     }
     .page.cover {
-      background-image: url('images/old-book-cover.png');
-      background-size: cover;
-      background-position: center;
+      background: #8e44ad;
       color: white;
-      font-size: 28px;
       justify-content: center;
-      font-weight: bold;
-      text-shadow: 1px 1px 3px #000;
+      font-size: 28px;
     }
     .page.back {
-      background: #3e2c1a;
-      color: #e2d6b5;
+      background: #2c3e50;
+      color: white;
       justify-content: center;
       font-size: 20px;
     }
@@ -88,7 +83,7 @@
       z-index: 10;
     }
     button {
-      background: #7a5c3d;
+      background: #7e57c2;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -97,38 +92,38 @@
       cursor: pointer;
     }
     button:disabled {
-      background: #aaa;
+      background: #ccc;
     }
   </style>
 </head>
 <body>
   <div class="book" id="book">
-    <!-- COVER -->
+    <!-- Cover -->
     <div class="page cover">
-      <p>📚 Wisuda Dea - Kisah yang Terukir</p>
+      <p>✨ Buku Wisuda Dea ✨</p>
     </div>
 
-    <!-- Halaman Isi -->
+    <!-- Isi Halaman -->
     <div class="page">
       <img src="images/1.jpg" alt="Halaman 1">
-      <p>Hari ini menjadi bab terakhir dari perjuangan panjangmu, tercatat dalam sejarah hidupmu.</p>
+      <p>Hari ini adalah bab terakhir dari perjuangan panjangmu...</p>
     </div>
     <div class="page">
       <img src="images/2.jpg" alt="Halaman 2">
-      <p>Setiap lelah dan air mata menjadi tinta di lembar catatan yang tak pernah terlupakan.</p>
+      <p>Setiap lelah, tumpah di antara tumpukan tugas dan ujian.</p>
     </div>
     <div class="page">
       <img src="images/3.jpg" alt="Halaman 3">
-      <p>Kamu bertahan, seperti pahlawan dalam kisah lama yang terus melangkah.</p>
+      <p>Tapi kamu bertahan. Kamu tetap berdiri.</p>
     </div>
     <div class="page">
       <img src="images/4.jpg" alt="Halaman 4">
-      <p>Selamat wisuda! Lembar baru telah dibuka. Kisah besar menantimu.</p>
+      <p>Selamat wisuda! Ini bukan akhir, tapi awal dari kisah yang lebih besar.</p>
     </div>
 
-    <!-- HALAMAN BELAKANG -->
+    <!-- Halaman Belakang -->
     <div class="page back">
-      <p>📖 Terima kasih telah membaca sejarah ini 💜</p>
+      <p>Terima kasih telah membaca 💜</p>
     </div>
   </div>
 
@@ -177,8 +172,13 @@
 
     document.getElementById('book').addEventListener('touchend', e => {
       let endX = e.changedTouches[0].clientX;
-      if (endX - startX > 50 && current > 0) current--;
-      else if (startX - endX > 50 && current < pages.length - 1) current++;
+      if (endX - startX > 50) {
+        // swipe right
+        if (current > 0) current--;
+      } else if (startX - endX > 50) {
+        // swipe left
+        if (current < pages.length - 1) current++;
+      }
       updatePages();
     });
 
