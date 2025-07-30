@@ -51,11 +51,24 @@
     .wish { background: #ffe4f2; margin: 10px; padding: 10px; border-radius: 10px; text-align: left; }
     .reply { background: #f8bbd0; margin-top: 8px; padding: 8px; border-left: 3px solid #c2185b; border-radius: 6px; }
     .hidden { display: none; }
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .controls button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <audio autoplay loop>
-    <source src="https://akarwshn.github.io/assets/lagu-wisuda.mp3" type="audio/mpeg">
+    <source src="https://akarwshn.github.io/SertaMulia/MyGirl.mp3" type="audio/mpeg">
   </audio>
 
   <div class="flipbook">
@@ -92,6 +105,11 @@
       </div>
       <div id="wishes"></div>
     </div>
+
+    <div class="controls">
+      <button onclick="prevPage()">⬅️ Sebelumnya</button>
+      <button onclick="nextPage()">Berikutnya ➡️</button>
+    </div>
   </div>
 
   <script>
@@ -100,6 +118,8 @@
       { username: 'teman', password: 'teman123', role: 'user' }
     ];
     let currentUser = null;
+    let currentPage = 0;
+    const pageIds = ['loginPage','page1','page2','page3','formPage'];
 
     function login() {
       const u = document.getElementById('username').value;
@@ -107,16 +127,33 @@
       const found = USERS.find(user => user.username === u && user.password === p);
       if (found) {
         currentUser = found;
-        document.getElementById('loginPage').classList.add('hidden');
-        const pages = ['page1','page2','page3','formPage'];
-        pages.forEach((pg, i) => {
-          setTimeout(() => {
-            document.getElementById(pg).classList.remove('hidden');
-            document.getElementById(pg).style.transform = `rotateY(${i * -180}deg)`;
-          }, i * 300);
-        });
+        goToPage(1);
       } else {
         document.getElementById('login-error').innerText = 'Login salah, coba lagi';
+      }
+    }
+
+    function goToPage(index) {
+      pageIds.forEach((id, i) => {
+        const page = document.getElementById(id);
+        if (i === index) {
+          page.classList.remove('hidden');
+        } else {
+          page.classList.add('hidden');
+        }
+      });
+      currentPage = index;
+    }
+
+    function nextPage() {
+      if (currentPage < pageIds.length - 1) {
+        goToPage(currentPage + 1);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        goToPage(currentPage - 1);
       }
     }
 
