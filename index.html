@@ -3,232 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flipbook Wisuda Dea</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-
- <style>
-  * {
-    box-sizing: border-box;
-    font-family: 'Quicksand', sans-serif;
-  }
-
-  body {
-    margin: 0;
-    background: linear-gradient(to bottom right, #fce4ec, #e3f2fd);
-    overflow-x: hidden;
-  }
-
-  .flipbook-container {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  .book-wrapper {
-    perspective: 2000px;
-    position: relative;
-    max-height: 100vh;
-    overflow: hidden;
-  }
-
-  .book {
-    width: 90vw;
-    max-width: 800px;
-    height: 90vh;
-    position: relative;
-    transform-style: preserve-3d;
-  }
-
-  .page {
-    width: 100%;
-    height: 100%;
-    background: white;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 30px;
-    border-radius: 10px;
-    backface-visibility: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transform-origin: left;
-    transition: transform 1s ease;
-    overflow-y: auto; /* <== ini yang penting */
-  }
-
-  .page img {
-    max-width: 80%;
-    border-radius: 10px;
-    margin-top: 20px;
-  }
-
-  .page.flipped {
-    transform: rotateY(-180deg);
-    z-index: 0;
-  }
-
-  .page:not(.flipped) {
-    z-index: 10;
-  }
-
-  .controls {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .controls button {
-    background-color: #c2185b;
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    margin: 0 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  input,
-  textarea {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-
-  #wishes div {
-    margin-top: 10px;
-    background: #f8bbd0;
-    padding: 10px;
-    border-radius: 8px;
-  }
-
-  audio {
-    display: block;
-    margin: 20px auto 0;
-  }
-
-  .hidden {
-    display: none;
-  }
-</style>
+  <title>Flipbook Wisuda</title>
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f0e6f6;
+      font-family: 'Georgia', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .book {
+      width: 600px;
+      height: 400px;
+      position: relative;
+      perspective: 2000px;
+    }
+    .page {
+      width: 100%;
+      height: 100%;
+      background: white;
+      position: absolute;
+      top: 0; left: 0;
+      transform-origin: left;
+      transition: transform 1s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      overflow: hidden;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .page img {
+      max-width: 100%;
+      max-height: 60%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .page p {
+      font-size: 18px;
+      text-align: center;
+      color: #444;
+    }
+    .page.flipped {
+      transform: rotateY(-180deg);
+      z-index: 0;
+    }
+    .nav-buttons {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 30px;
+    }
+    button {
+      background: #7e57c2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #ccc;
+    }
+  </style>
 </head>
 <body>
-
-  <!-- Login Section -->
-  <div id="login-section" class="flipbook-container">
-    <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-      <p id="login-error" style="color: red;"></p>
+  <div class="book" id="book">
+    <div class="page">
+      <img src="images/1.jpg" alt="Wisuda 1">
+      <p>Hari ini adalah bab terakhir dari perjuangan panjangmu...</p>
+    </div>
+    <div class="page">
+      <img src="images/2.jpg" alt="Wisuda 2">
+      <p>Setiap lelah, tumpah di antara tumpukan tugas dan ujian.</p>
+    </div>
+    <div class="page">
+      <img src="images/3.jpg" alt="Wisuda 3">
+      <p>Tapi kamu bertahan. Kamu tetap berdiri.</p>
+    </div>
+    <div class="page">
+      <img src="images/4.jpg" alt="Wisuda 4">
+      <p>Hari ini, topi toga itu adalah bukti: kamu menang!</p>
+    </div>
+    <div class="page">
+      <img src="images/5.jpg" alt="Wisuda 5">
+      <p>Selamat wisuda! Ini bukan akhir, tapi awal dari kisah yang lebih besar.</p>
     </div>
   </div>
 
-  <!-- Flipbook Section -->
-  <div id="flipbook-section" class="flipbook-container hidden">
-    <div class="book-wrapper">
-      <div class="book" id="book">
-
-        <!-- Page 1 -->
-        <div class="page">
-          <h1>Selamat Wisuda Dea Aprilia 🎓</h1>
-          <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Wisuda">
-        </div>
-
-        <!-- Page 2 -->
-        <div class="page">
-          <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea">
-        </div>
-
-        <!-- Page 3 -->
-        <div class="page">
-          <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
-          <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Dea Lagi">
-        </div>
-
-        <!-- Page 4: Form -->
-        <div class="page">
-          <h2>Berikan Ucapan untuk Dea 🥰</h2>
-          <input type="text" id="name" placeholder="Namamu">
-          <textarea id="message" placeholder="Tulis ucapanmu di sini..."></textarea>
-          <button onclick="sendWish()">Kirim Ucapan</button>
-          <div id="wishes"></div>
-          <audio controls autoplay loop>
-            <source src="https://github.com/akarwshn/bahagia/raw/main/assets/audio.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-
-      </div>
+  <div class="nav-buttons">
+    <button id="prevBtn">← Sebelumnya</button>
+    <button id="nextBtn">Selanjutnya →</button>
+  </div>
 
   <script>
-    const loginSection = document.getElementById("login-section");
-    const flipbookSection = document.getElementById("flipbook-section");
-
-    function login() {
-      const u = document.getElementById('username').value;
-      const p = document.getElementById('password').value;
-      if ((u === "dea" && p === "dea123") || (u === "teman" && p === "teman123")) {
-        loginSection.classList.add("hidden");
-        flipbookSection.classList.remove("hidden");
-      } else {
-        document.getElementById("login-error").innerText = "Login salah, coba lagi!";
-      }
-    }
-
     const pages = document.querySelectorAll('.page');
     let current = 0;
 
-    function nextPage() {
-      if (current < pages.length - 1) {
-        pages[current].classList.add('flipped');
-        current++;
-      }
+    function updatePages() {
+      pages.forEach((page, i) => {
+        page.style.zIndex = pages.length - i;
+        if (i <= current) {
+          page.classList.add('flipped');
+        } else {
+          page.classList.remove('flipped');
+        }
+      });
+      document.getElementById('prevBtn').disabled = current <= 0;
+      document.getElementById('nextBtn').disabled = current >= pages.length - 1;
     }
 
-    function prevPage() {
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (current < pages.length - 1) {
+        current++;
+        updatePages();
+      }
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
       if (current > 0) {
         current--;
-        pages[current].classList.remove('flipped');
+        updatePages();
       }
-    }
+    });
 
-    const wishes = [];
-
-    function sendWish() {
-      const name = document.getElementById('name').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!name || !message) return;
-
-      wishes.unshift({ name, message });
-      loadWishes();
-
-      document.getElementById('name').value = '';
-      document.getElementById('message').value = '';
-    }
-
-    function loadWishes() {
-      const wishesDiv = document.getElementById('wishes');
-      wishesDiv.innerHTML = '';
-
-      wishes.forEach(w => {
-        wishesDiv.innerHTML += `<div><strong>${w.name}</strong>: ${w.message}</div>`;
-      });
-    }
+    updatePages();
   </script>
-
 </body>
 </html>
