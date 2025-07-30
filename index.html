@@ -12,20 +12,25 @@
       font-family: 'Segoe UI', sans-serif;
     }
     .flipbook {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      perspective: 2000px;
+      position: relative;
+      width: 100vw;
       height: 100vh;
+      overflow: hidden;
     }
     .page {
-      flex: none;
-      scroll-snap-align: start;
-      width: 100vw;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      transform-origin: left;
+      transform-style: preserve-3d;
+      transition: transform 1s;
       padding: 30px;
       box-sizing: border-box;
       text-align: center;
-      background: #fff;
-      position: relative;
+      backface-visibility: hidden;
     }
     .page img {
       max-width: 90%;
@@ -54,7 +59,7 @@
   </audio>
 
   <div class="flipbook">
-    <div class="page animate__animated animate__fadeInLeft">
+    <div class="page" style="z-index: 5;" id="loginPage">
       <h2>Login Ucapan Wisuda</h2>
       <input type="text" id="username" placeholder="Username">
       <input type="password" id="password" placeholder="Password">
@@ -62,23 +67,23 @@
       <p id="login-error" style="color:red"></p>
     </div>
 
-    <div class="page hidden" id="page1">
+    <div class="page hidden" style="z-index: 4;" id="page1">
       <h1>Selamat Wisuda, Dea Aprilia 🎓</h1>
       <p>Langit hari ini berseri, karena kamu berseragam toga ✨</p>
       <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png" alt="Foto Wisuda">
     </div>
 
-    <div class="page hidden" id="page2">
+    <div class="page hidden" style="z-index: 3;" id="page2">
       <p>Perjalananmu penuh perjuangan,<br>pagi-pagi ngampus, malam nugas.<br>Hari ini semua terbayar lunas 🥳</p>
       <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png">
     </div>
 
-    <div class="page hidden" id="page3">
+    <div class="page hidden" style="z-index: 2;" id="page3">
       <p>Kami bangga padamu, Dea.<br>Teruslah bersinar dan menginspirasi 💫</p>
       <img src="https://akarwshn.github.io/SertaMulia/dea-wisuda.png">
     </div>
 
-    <div class="page hidden" id="formPage">
+    <div class="page hidden" style="z-index: 1;" id="formPage">
       <h2>Kirim Ucapanmu</h2>
       <div class="form-section">
         <input type="text" id="name" placeholder="Namamu">
@@ -102,10 +107,14 @@
       const found = USERS.find(user => user.username === u && user.password === p);
       if (found) {
         currentUser = found;
-        document.querySelectorAll('.page').forEach((pg, i) => {
-          if (i > 0) pg.classList.remove('hidden');
+        document.getElementById('loginPage').classList.add('hidden');
+        const pages = ['page1','page2','page3','formPage'];
+        pages.forEach((pg, i) => {
+          setTimeout(() => {
+            document.getElementById(pg).classList.remove('hidden');
+            document.getElementById(pg).style.transform = `rotateY(${i * -180}deg)`;
+          }, i * 300);
         });
-        document.querySelectorAll('.page')[0].classList.add('hidden');
       } else {
         document.getElementById('login-error').innerText = 'Login salah, coba lagi';
       }
