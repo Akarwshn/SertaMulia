@@ -2,17 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Ucapan Wisuda</title>
+  <title>Ucapan Wisuda Dea Aprilia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS Animasi dan Font -->
+  <!-- Font & Animasi -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Comic Neue', cursive;
+      margin: 0;
       background: linear-gradient(#ffe9ec, #ffe3f3);
       color: #333;
       text-align: center;
@@ -37,14 +37,12 @@
 
     h1 {
       font-size: 2.5em;
-      margin-bottom: 0;
       color: #c2185b;
     }
 
     p.subtitle {
       font-size: 1.2em;
       color: #777;
-      margin-top: 0;
     }
 
     .form-section {
@@ -54,10 +52,6 @@
       margin: 30px auto;
       padding: 30px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .form-section h2 {
-      color: #d81b60;
     }
 
     input, textarea {
@@ -77,11 +71,6 @@
       border-radius: 20px;
       font-size: 1em;
       cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: #e91e63;
     }
 
     .message-board {
@@ -102,23 +91,33 @@
       color: #c2185b;
     }
 
+    .reply-box {
+      margin-top: 10px;
+      padding: 8px;
+      background: #f8bbd0;
+      border-left: 3px solid #c2185b;
+      border-radius: 6px;
+    }
+
+    .reply-form {
+      margin-top: 20px;
+    }
+
     footer {
       margin-top: 40px;
       font-size: 0.9em;
       color: #888;
     }
 
-    audio {
-      display: none;
-    }
+    audio { display: none; }
   </style>
 </head>
 <body>
 
   <header class="animate__animated animate__fadeInDown">
     <img src="https://i.ibb.co/k1dPtdp/graduation-pic.jpg" alt="Foto Wisuda" class="graduation-photo">
-    <h1>Selamat Wisuda, Kak Aisyah!</h1>
-    <p class="subtitle">Hari ini bintang tak hanya di langit ✨</p>
+    <h1>Selamat Wisuda, Dea Aprilia!</h1>
+    <p class="subtitle">gua ga pandai berkata kata, tapi apa yg udh lu lakuin sejauh ini, sumpah lu keren bingitssss :D ✨</p>
   </header>
 
   <section class="form-section animate__animated animate__fadeInUp animate__delay-1s">
@@ -131,28 +130,37 @@
   </section>
 
   <section class="message-board" id="wishes">
-    <!-- Data akan muncul di sini -->
+    <!-- Ucapan dan balasan muncul di sini -->
+  </section>
+
+  <section class="form-section reply-form">
+    <h2>Balasan dari Dea 💬</h2>
+    <form id="replyForm">
+      <input type="number" id="replyId" placeholder="ID ucapan yang ingin dibalas" required>
+      <textarea id="replyText" rows="3" placeholder="Tulis balasanmu..." required></textarea>
+      <button type="submit">Balas</button>
+    </form>
   </section>
 
   <footer>
-    © 2025 Untuk Kak Aisyah, dari sahabat-sahabat tersayang.
+    © 2025 Untuk Dea Aprilia, dari sahabat-sahabat tersayang.
   </footer>
 
-  <audio autoplay loop id="bgm">
+  <audio autoplay loop>
     <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Script ke Supabase -->
+  <!-- Supabase -->
   <script type="module">
-    // Ganti dengan config kamu
-    const SUPABASE_URL = 'https://defrxrgsnnmxpbucomop.supabase.co';
-    const SUPABASE_KEY = 'public-anon-key-kamu';
+    const SUPABASE_URL = 'https://temlsgkkbdphwcyqrosm.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbWxzZ2trYmRwaHdjeXFyb3NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2Mjg4MzYsImV4cCI6MjA2MjIwNDgzNn0.5I0s9ZrZfc0QXWgfY1JEUsVgNDoBMYEnDwHDDL5lKUo';
     const TABLE_NAME = 'wishes';
 
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const form = document.getElementById('wishForm');
+    const wishForm = document.getElementById('wishForm');
+    const replyForm = document.getElementById('replyForm');
     const wishesDiv = document.getElementById('wishes');
 
     async function loadWishes() {
@@ -161,29 +169,37 @@
         .select('*')
         .order('id', { ascending: false });
 
-      if (data) {
-        wishesDiv.innerHTML = '';
-        data.forEach(wish => {
-          const div = document.createElement('div');
-          div.className = 'wish animate__animated animate__fadeIn';
-          div.innerHTML = `<strong>${wish.name}</strong><br>${wish.message}`;
-          wishesDiv.appendChild(div);
-        });
-      }
+      wishesDiv.innerHTML = '';
+      data.forEach(wish => {
+        const div = document.createElement('div');
+        div.className = 'wish animate__animated animate__fadeIn';
+        div.innerHTML = `
+          <strong>ID ${wish.id} - ${wish.name}</strong><br>${wish.message}
+          ${wish.reply ? `<div class="reply-box"><strong>Dea Aprilia:</strong><br>${wish.reply}</div>` : ''}
+        `;
+        wishesDiv.appendChild(div);
+      });
     }
 
-    form.addEventListener('submit', async (e) => {
+    wishForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value;
       const message = document.getElementById('message').value;
-
       await supabase.from(TABLE_NAME).insert([{ name, message }]);
-      form.reset();
+      wishForm.reset();
+      loadWishes();
+    });
+
+    replyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('replyId').value);
+      const reply = document.getElementById('replyText').value;
+      await supabase.from(TABLE_NAME).update({ reply }).eq('id', id);
+      replyForm.reset();
       loadWishes();
     });
 
     loadWishes();
   </script>
-
 </body>
 </html>
