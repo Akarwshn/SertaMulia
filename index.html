@@ -1,159 +1,537 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ucapan Wisuda - Flipbook</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet"/>
-  <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to right, #004e92, #000428);
-      font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semangat Kk Dzikra</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-    .login-container, .flipbook-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: white;
-    }
+    <style type="text/tailwindcss">
+      @theme {
+        --color-love-primary: #ec4899;
+        --color-love-secondary: #f472b6;
+        --color-love-light: #fbcfe8;
+      }
 
-    h1, h2 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 2.5em;
-    }
+      .btn-love {
+        @apply relative overflow-hidden bg-gradient-to-r from-pink-500 to-pink-600 
+               text-white font-bold py-5 px-10 rounded-xl shadow-lg 
+               hover:shadow-pink-400/50 flex items-center justify-center gap-4 
+               transition-all duration-300 ease-out hover:-translate-y-1;
+      }
 
-    .login-box, .wish-form {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-    }
+      .btn-love::before {
+        @apply content-[""] absolute top-0 left-[-100%] w-full h-full 
+               bg-gradient-to-r from-white/20 to-transparent skew-x-[-25deg] 
+               transition-all duration-700 ease-in-out z-0;
+      }
 
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 1em;
-    }
+      .btn-love:hover::before {
+        @apply left-[100%];
+      }
 
-    button {
-      background-color: #ffd700;
-      color: #000;
-      cursor: pointer;
-    }
+      .btn-love:active {
+        @apply transform scale-95 translate-y-0.5;
+      }
 
-    #flipbook {
-      width: 800px;
-      height: 500px;
-      margin: 30px auto;
-    }
+      .decorative-frame {
+        @apply relative inline-block p-8 rounded-2xl bg-pink-50/30 
+               backdrop-blur-sm shadow-xl transition-all duration-300 
+               hover:shadow-pink-300/50 hover:bg-pink-50/40;
+      }
 
-    .page {
-      background-color: #fffbe7;
-      border: 1px solid #ddd;
-      padding: 20px;
-      font-size: 1.2em;
-      overflow: auto;
-    }
+      .decorative-pattern {
+        @apply absolute inset-0 rounded-2xl overflow-hidden opacity-20 pointer-events-none;
+      }
 
-    .controls {
-      text-align: center;
-      margin-top: 20px;
-    }
+      .decorative-line {
+        @apply absolute bg-gradient-to-r from-pink-300/40 to-pink-500/40 transition-all duration-500;
+      }
 
-    .controls button {
-      margin: 0 20px;
-      padding: 10px 20px;
-      background: gold;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+      .text-glow {
+        @apply relative text-white drop-shadow-[0_0_8px_rgba(236,72,153,0.5)];
+      }
 
-    audio {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-    }
-  </style>
-</head>
-<body>
+      .floating-particles {
+        @apply fixed inset-0 pointer-events-none overflow-hidden z-[-1];
+      }
 
-<div class="login-container" id="login">
-  <h1>Selamat Datang di Buku Ucapan Wisuda 🎓</h1>
-  <div class="login-box">
-    <input type="text" id="username" placeholder="Nama"/>
-    <input type="password" id="password" placeholder="Password"/>
-    <button onclick="checkLogin()">Masuk</button>
-  </div>
-</div>
+      .particle {
+        @apply absolute rounded-full bg-pink-400/30 pointer-events-none;
+      }
 
-<div id="flipbook-container" class="flipbook-container" style="display:none;">
-  <div id="flipbook">
-    <div class="page"><h2>Selamat Wisuda!</h2><p>Hari ini kamu telah resmi menjadi sarjana. Ini adalah awal dari petualangan baru.</p></div>
-    <div class="page"><h2>Perjalanan Panjang</h2><p>Selama kuliah, kamu telah melewati tawa, tangis, tugas, dan perjuangan tak kenal lelah.</p></div>
-    <div class="page"><h2>Terima Kasih</h2><p>Untuk dosen, orang tua, teman sekelas, dan semua yang telah menemanimu sampai titik ini.</p></div>
-    <div class="page"><h2>Ucapan & Harapan</h2><form class="wish-form" onsubmit="submitWish(event)">
-      <input type="text" id="nama" placeholder="Nama kamu" required>
-      <textarea id="pesan" placeholder="Ucapanmu..." required></textarea>
-      <button type="submit">Kirim Ucapan</button>
-    </form></div>
-  </div>
+      .icon-glow {
+        @apply drop-shadow-[0_0_8px_rgba(255,255,255,0.7)];
+      }
+    </style>
 
-  <div class="controls">
-    <button onclick="$('#flipbook').turn('previous')">⬅ Sebelumnya</button>
-    <button onclick="$('#flipbook').turn('next')">Selanjutnya ➡</button>
-  </div>
-</div>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+      }
 
-<audio id="musik" autoplay loop controls>
-  <source src="https://cdn.pixabay.com/download/audio/2023/05/02/audio_d93a6e8a0e.mp3?filename=inspiring-graduation-137707.mp3" type="audio/mpeg">
-</audio>
-<audio id="flipSound" src="https://www.soundjay.com/books/book-page-flip-04.mp3" preload="auto"></audio>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
-<script>
-  function checkLogin() {
-    const u = document.getElementById("username").value;
-    const p = document.getElementById("password").value;
-    if ((u && p) && (p === "wisuda2025")) {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("flipbook-container").style.display = "block";
-      $("#flipbook").turn({
-        width: 800,
-        height: 500,
-        autoCenter: true,
-        when: {
-          turning: function() {
-            document.getElementById("flipSound").play();
-          }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7);
         }
-      });
-    } else {
-      alert("Login gagal! Gunakan password: wisuda2025");
+        70% {
+          box-shadow: 0 0 0 15px rgba(236, 72, 153, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(236, 72, 153, 0);
+        }
+      }
+
+      .pulse-effect {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes heartBeat {
+        0% {
+          transform: scale(1);
+        }
+        14% {
+          transform: scale(1.3);
+        }
+        28% {
+          transform: scale(1);
+        }
+        42% {
+          transform: scale(1.3);
+        }
+        70% {
+          transform: scale(1);
+        }
+      }
+
+      .icon-beat {
+        animation: heartBeat 1.2s ease-in-out infinite;
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+      }
+
+      .tab-exit {
+        animation: fadeOut 0.5s ease forwards;
+      }
+
+      @keyframes float-up {
+        0% {
+          transform: translateY(0) scale(0.5);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.8;
+        }
+        80% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-100px) scale(1.2) rotate(20deg);
+          opacity: 0;
+        }
+      }
+
+      .floating-heart {
+        position: absolute;
+        color: #fda4af;
+        opacity: 0;
+        font-size: 12px;
+        animation-name: float-up;
+        animation-timing-function: ease-out;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .rotate-slow {
+        animation: rotate 20s linear infinite;
+      }
+
+      .rotate-reverse {
+        animation: rotate 15s linear infinite reverse;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .shimmer-effect {
+        background: linear-gradient(
+          90deg,
+          rgba(236, 72, 153, 0) 0%,
+          rgba(236, 72, 153, 0.4) 25%,
+          rgba(236, 72, 153, 0.6) 50%,
+          rgba(236, 72, 153, 0.4) 75%,
+          rgba(236, 72, 153, 0) 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .float-animation {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes dash {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      .draw-path {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: dash 2s ease-in-out forwards;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gradient-to-br from-pink-100 via-pink-200 to-pink-100 min-h-screen flex items-center justify-center"
+  >
+    <!-- Background particles -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- Decorative circles -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+      <div
+        class="absolute top-[20%] left-[15%] w-56 h-56 rounded-full bg-gradient-to-r from-pink-300/20 to-purple-300/20 rotate-slow blur-xl"
+      ></div>
+      <div
+        class="absolute bottom-[20%] right-[15%] w-64 h-64 rounded-full bg-gradient-to-r from-pink-400/20 to-purple-200/20 rotate-reverse blur-xl"
+      ></div>
+      <div
+        class="absolute top-[60%] left-[60%] w-40 h-40 rounded-full bg-gradient-to-r from-pink-200/20 to-purple-400/20 rotate-slow blur-xl"
+      ></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="text-center relative z-10 float-animation">
+      <!-- Floating hearts container -->
+      <div id="floatingHearts"></div>
+
+      <!-- Decorative SVG top -->
+      <svg
+        class="absolute top-[-40px] left-1/2 transform -translate-x-1/2 w-[120%] h-8 opacity-30"
+        viewBox="0 0 100 10"
+      >
+        <path
+          class="draw-path"
+          d="M0,5 C20,-5 40,15 60,5 S80,-5 100,5"
+          fill="none"
+          stroke="#ec4899"
+          stroke-width="0.5"
+        ></path>
+      </svg>
+
+      <!-- Button container with decorative frame -->
+      <div class="decorative-frame group">
+        <!-- Decorative pattern -->
+        <div class="decorative-pattern">
+          <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <pattern
+              id="hearts-pattern"
+              x="0"
+              y="0"
+              width="20"
+              height="20"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M10,6 Q10,0 15,0 T20,6 Q20,10 10,16 Q0,10 0,6 Q0,0 5,0 T10,6 Z"
+                fill="#ec4899"
+                fill-opacity="0.2"
+              ></path>
+            </pattern>
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              fill="url(#hearts-pattern)"
+            ></rect>
+          </svg>
+        </div>
+
+        <!-- Decorative lines -->
+        <div
+          class="decorative-line h-0.5 w-[30%] top-5 left-5 group-hover:w-[40%] group-hover:bg-pink-400/60"
+        ></div>
+        <div
+          class="decorative-line h-0.5 w-[30%] bottom-5 right-5 group-hover:w-[40%] group-hover:bg-pink-400/60"
+        ></div>
+        <div
+          class="decorative-line w-0.5 h-[30%] top-5 left-5 group-hover:h-[40%] group-hover:bg-pink-400/60"
+        ></div>
+        <div
+          class="decorative-line w-0.5 h-[30%] bottom-5 right-5 group-hover:h-[40%] group-hover:bg-pink-400/60"
+        ></div>
+
+        <!-- Glowing corners -->
+        <div
+          class="absolute top-2 left-2 w-4 h-4 rounded-full bg-pink-400/40 blur-[2px] group-hover:bg-pink-400/60 group-hover:blur-[3px] transition-all duration-300"
+        ></div>
+        <div
+          class="absolute top-2 right-2 w-4 h-4 rounded-full bg-pink-400/40 blur-[2px] group-hover:bg-pink-400/60 group-hover:blur-[3px] transition-all duration-300"
+        ></div>
+        <div
+          class="absolute bottom-2 left-2 w-4 h-4 rounded-full bg-pink-400/40 blur-[2px] group-hover:bg-pink-400/60 group-hover:blur-[3px] transition-all duration-300"
+        ></div>
+        <div
+          class="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-pink-400/40 blur-[2px] group-hover:bg-pink-400/60 group-hover:blur-[3px] transition-all duration-300"
+        ></div>
+
+        <!-- Shimmer effect layer -->
+        <div
+          class="absolute inset-0 shimmer-effect rounded-2xl opacity-30 pointer-events-none"
+        ></div>
+
+        <!-- The Button -->
+        <button
+          onclick="openNewTab()"
+          class="btn-love pulse-effect relative z-10"
+          id="loveButton"
+        >
+          <!-- Text with glow effect -->
+          <span
+            class="text-glow text-lg font-semibold transition-transform duration-300 group-hover:translate-x-1"
+          >
+            Klik Di Sini KK Dzikra
+          </span>
+
+          <!-- Heart icon -->
+          <i class="fas fa-heart icon-beat text-xl text-pink-100 icon-glow"></i>
+
+          <!-- Ripple effect (created by JS) -->
+          <div
+            id="rippleContainer"
+            class="absolute inset-0 overflow-hidden rounded-xl pointer-events-none"
+          ></div>
+        </button>
+      </div>
+
+      <!-- Decorative SVG bottom -->
+      <svg
+        class="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 w-[120%] h-8 opacity-30"
+        viewBox="0 0 100 10"
+      >
+        <path
+          class="draw-path"
+          d="M0,5 C20,15 40,-5 60,5 S80,15 100,5"
+          fill="none"
+          stroke="#ec4899"
+          stroke-width="0.5"
+        ></path>
+      </svg>
+    </div>
+
+    <script>
+      // Create background particles
+      function createParticles() {
+        const particlesContainer = document.getElementById("particles");
+        const particleCount = 30;
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+
+          // Random size between 3px and 10px
+          const size = Math.random() * 7 + 3;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+
+          // Random position
+          const posX = Math.random() * 100;
+          const posY = Math.random() * 100;
+          particle.style.left = `${posX}%`;
+          particle.style.top = `${posY}%`;
+
+          // Random opacity
+          particle.style.opacity = (Math.random() * 0.5 + 0.1).toString();
+
+          // Random animation duration and delay
+          const duration = Math.random() * 15 + 10;
+          const delay = Math.random() * 5;
+          particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite alternate`;
+
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      // Create ripple effect on button click
+      // Create ripple effect on button click
+function createRipple(event) {
+    const button = document.getElementById('loveButton');
+    const rippleContainer = document.getElementById('rippleContainer');
+    
+    const circle = document.createElement('span');
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+    
+    const rect = button.getBoundingClientRect();
+    const x = event.clientX - rect.left - radius;
+    const y = event.clientY - rect.top - radius;
+    
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${x}px`;
+    circle.style.top = `${y}px`;
+    circle.style.position = 'absolute';
+    circle.style.borderRadius = '50%';
+    circle.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+    circle.style.transform = 'scale(0)';
+    circle.style.animation = 'ripple 0.8s ease-out';
+    
+    // Periksa apakah animasi ripple sudah ada di head
+    if (!document.querySelector('style#ripple-animation')) {
+        const style = document.createElement('style');
+        style.id = 'ripple-animation';
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     }
-  }
+    
+    rippleContainer.appendChild(circle);
+    
+    setTimeout(() => {
+        circle.remove();
+    }, 800);
+}
 
-  function submitWish(e) {
-    e.preventDefault();
-    const nama = document.getElementById("nama").value;
-    const pesan = document.getElementById("pesan").value;
-    // Ganti bagian ini jika kamu ingin menyimpan ke Supabase
-    alert(`Terima kasih atas ucapanmu, ${nama}!`);
-    document.getElementById("nama").value = "";
-    document.getElementById("pesan").value = "";
-  }
-</script>
+      function createFloatingHearts() {
+        const heartsContainer = document.getElementById("floatingHearts");
+        heartsContainer.innerHTML = "";
 
-</body>
+        for (let i = 0; i < 30; i++) {
+          setTimeout(() => {
+            const heart = document.createElement("div");
+            heart.className = "floating-heart";
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+
+            const x = Math.random() * 300 - 150;
+            const startY = Math.random() * 20 + 50;
+            heart.style.left = `${x}px`;
+            heart.style.bottom = `${startY}px`;
+
+            const size = Math.random() * 1 + 0.8;
+            heart.style.fontSize = `${size}rem`;
+
+            // Random colors
+            const colors = ["#f472b6", "#ec4899", "#fb7185", "#fda4af"];
+            heart.style.color =
+              colors[Math.floor(Math.random() * colors.length)];
+
+            const duration = Math.random() * 2 + 2;
+            const delay = Math.random() * 0.5;
+            heart.style.animation = `float-up ${duration}s ease-out ${delay}s`;
+
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+              heart.remove();
+            }, (duration + delay) * 1000);
+          }, i * 80);
+        }
+      }
+
+      function openNewTab() {
+    // Add ripple effect at center of button
+    const button = document.getElementById("loveButton");
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    createRipple({ clientX: centerX, clientY: centerY });
+
+    // Create floating hearts
+    createFloatingHearts();
+
+    // Add exit animation to current tab
+    document.body.classList.add("tab-exit");
+
+    // Navigate to the motivasi page in the same window after animation completes
+    setTimeout(() => {
+        // Simpan informasi di sessionStorage bahwa kita sedang melakukan transisi halaman
+        sessionStorage.setItem('pageTransition', 'true');
+        
+        // Navigasi ke halaman motivasi di jendela yang sama
+        window.location.href = "./pages/motivasi.html";
+    }, 600);
+}
+      // Initialize background particles when the page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        createParticles();
+
+        // Add click event for ripple effect
+        const button = document.getElementById("loveButton");
+        button.addEventListener("click", createRipple);
+
+        // Occasional floating hearts
+        setInterval(() => {
+          const heart = document.createElement("div");
+          heart.className = "floating-heart";
+          heart.innerHTML = '<i class="fas fa-heart"></i>';
+
+          const x = Math.random() * 300 - 150;
+          const startY = Math.random() * 20;
+          heart.style.left = `${x}px`;
+          heart.style.bottom = `${startY}px`;
+          heart.style.opacity = "0.3";
+
+          const duration = Math.random() * 3 + 3;
+          heart.style.animation = `float-up ${duration}s ease-out`;
+
+          document.getElementById("floatingHearts").appendChild(heart);
+
+          setTimeout(() => {
+            heart.remove();
+          }, duration * 1000);
+        }, 3000);
+      });
+    </script>
+  </body>
 </html>
