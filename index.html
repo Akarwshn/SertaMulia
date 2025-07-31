@@ -147,7 +147,6 @@
 
 <div class="book hidden" id="book">
   <div class="page cover"><p>✨ Buku Wisuda Dea ✨</p></div>
-
   <div class="page">
     <h2>GARIS WAKTU</h2>
     <img src="dea-wisuda.png" alt="Halaman 1">
@@ -185,7 +184,8 @@
       document.getElementById('book').classList.remove('hidden');
       document.getElementById('navBtns').classList.remove('hidden');
       document.getElementById('bgm').play();
-      updatePages(); // Trigger typing effect
+      updatePages();
+      runTypingEffect(current);
     } else {
       errorMsg.style.display = 'block';
     }
@@ -199,13 +199,6 @@
       page.style.zIndex = pages.length - index;
       if (index <= current) {
         page.classList.add('flipped');
-        const p = page.querySelector('.typing');
-        if (p) {
-          p.classList.remove('typed');
-          p.innerHTML = '';
-          typeEffect(p, 30);
-          p.classList.add('typed');
-        }
       } else {
         page.classList.remove('flipped');
       }
@@ -214,10 +207,29 @@
     document.getElementById('nextBtn').disabled = current >= pages.length - 1;
   }
 
+  function runTypingEffect(index) {
+    const page = pages[index];
+    const p = page.querySelector('.typing');
+    if (p) {
+      const text = p.getAttribute('data-text');
+      p.textContent = '';
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          p.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 40);
+        }
+      }
+      type();
+    }
+  }
+
   document.getElementById('nextBtn').onclick = () => {
     if (current < pages.length - 1) {
       current++;
       updatePages();
+      setTimeout(() => runTypingEffect(current), 600);
     }
   };
 
@@ -225,6 +237,7 @@
     if (current > 0) {
       current--;
       updatePages();
+      setTimeout(() => runTypingEffect(current), 600);
     }
   };
 
@@ -232,7 +245,6 @@
   document.getElementById('book').addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
   });
-
   document.getElementById('book').addEventListener('touchend', e => {
     let endX = e.changedTouches[0].clientX;
     if (endX - startX > 50) {
@@ -241,21 +253,8 @@
       if (current < pages.length - 1) current++;
     }
     updatePages();
+    setTimeout(() => runTypingEffect(current), 600);
   });
-
-  function typeEffect(element, speed) {
-    const text = element.getAttribute('data-text');
-    element.innerHTML = '';
-    let i = 0;
-    function typing() {
-      if (i < text.length) {
-        element.innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typing, speed);
-      }
-    }
-    typing();
-  }
 
   updatePages();
 </script>
