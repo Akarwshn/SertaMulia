@@ -175,6 +175,10 @@
 </div>
 
 <script>
+  const pages = document.querySelectorAll('.page');
+  let current = 0;
+  let typingTimeout;
+
   function login() {
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
@@ -185,14 +189,11 @@
       document.getElementById('navBtns').classList.remove('hidden');
       document.getElementById('bgm').play();
       updatePages();
-      runTypingEffect(current);
+      setTimeout(() => runTypingEffect(current), 500);
     } else {
       errorMsg.style.display = 'block';
     }
   }
-
-  const pages = document.querySelectorAll('.page');
-  let current = 0;
 
   function updatePages() {
     pages.forEach((page, index) => {
@@ -218,9 +219,10 @@
         if (i < text.length) {
           p.textContent += text.charAt(i);
           i++;
-          setTimeout(type, 40);
+          typingTimeout = setTimeout(type, 40);
         }
       }
+      clearTimeout(typingTimeout);
       type();
     }
   }
@@ -247,10 +249,10 @@
   });
   document.getElementById('book').addEventListener('touchend', e => {
     let endX = e.changedTouches[0].clientX;
-    if (endX - startX > 50) {
-      if (current > 0) current--;
-    } else if (startX - endX > 50) {
-      if (current < pages.length - 1) current++;
+    if (endX - startX > 50 && current > 0) {
+      current--;
+    } else if (startX - endX > 50 && current < pages.length - 1) {
+      current++;
     }
     updatePages();
     setTimeout(() => runTypingEffect(current), 600);
