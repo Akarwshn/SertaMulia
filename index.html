@@ -179,19 +179,22 @@
   let current = 0;
   let typingTimeout;
 
-  function login() {
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
-    const errorMsg = document.getElementById('loginError');
-    if (user === 'dea' && pass === 'wisuda') {
-      document.getElementById('loginContainer').classList.add('hidden');
-      document.getElementById('book').classList.remove('hidden');
-      document.getElementById('navBtns').classList.remove('hidden');
-      document.getElementById('bgm').play();
-      updatePages();
-      setTimeout(() => runTypingEffect(current), 500);
-    } else {
-      errorMsg.style.display = 'block';
+  function runTypingEffect(index) {
+    const page = pages[index];
+    const p = page.querySelector('.typing');
+    if (p) {
+      const text = p.getAttribute('data-text');
+      p.textContent = '';
+      let i = 0;
+      clearTimeout(typingTimeout);
+      function type() {
+        if (i < text.length) {
+          p.textContent += text.charAt(i);
+          i++;
+          typingTimeout = setTimeout(type, 50);
+        }
+      }
+      type();
     }
   }
 
@@ -206,24 +209,22 @@
     });
     document.getElementById('prevBtn').disabled = current <= 0;
     document.getElementById('nextBtn').disabled = current >= pages.length - 1;
+    setTimeout(() => runTypingEffect(current), 600);
   }
 
-  function runTypingEffect(index) {
-    const page = pages[index];
-    const p = page.querySelector('.typing');
-    if (p) {
-      const text = p.getAttribute('data-text');
-      p.textContent = '';
-      let i = 0;
-      function type() {
-        if (i < text.length) {
-          p.textContent += text.charAt(i);
-          i++;
-          typingTimeout = setTimeout(type, 40);
-        }
-      }
-      clearTimeout(typingTimeout);
-      type();
+  function login() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const errorMsg = document.getElementById('loginError');
+    if (user === 'dea' && pass === 'wisuda') {
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('book').classList.remove('hidden');
+      document.getElementById('navBtns').classList.remove('hidden');
+      document.getElementById('bgm').play();
+      current = 1;
+      updatePages();
+    } else {
+      errorMsg.style.display = 'block';
     }
   }
 
@@ -231,7 +232,6 @@
     if (current < pages.length - 1) {
       current++;
       updatePages();
-      setTimeout(() => runTypingEffect(current), 600);
     }
   };
 
@@ -239,7 +239,6 @@
     if (current > 0) {
       current--;
       updatePages();
-      setTimeout(() => runTypingEffect(current), 600);
     }
   };
 
@@ -255,7 +254,6 @@
       current++;
     }
     updatePages();
-    setTimeout(() => runTypingEffect(current), 600);
   });
 
   updatePages();
